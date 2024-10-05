@@ -85,5 +85,11 @@ public class Jugador {
             return false;
         }
     }
+    //override al toString
+    @Override
+    public String toString(){
+        return "nombre: " + this.getNombre() + ", edad: " + this.getEdad() + 
+                ", alias: " + this.getAlias() ;
+    }
 
 }
