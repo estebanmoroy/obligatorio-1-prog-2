@@ -45,7 +45,8 @@ public class Prueba {
         sistema.mostrarBienvenida();
         int opcion = teclado.nextInt();
         sistema.procesarOpcion(opcion);
-
+        teclado.close();
+        
     }
 
 }

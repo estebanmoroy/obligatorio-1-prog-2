@@ -8,13 +8,20 @@ package juego;
  *
  * @author Esteban Moroy 338885, Facundo Martinez
  */
+import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Sistema {
     // Atributos
     private Partida partidaActual;
-    private Partida[] historialPartidas;
-    private Jugador[] jugadores;
+    private ArrayList <Partida> historialPartidas;
+    private ArrayList <Jugador> jugadores;
 
+    //contructor
+    public Sistema() {
+        historialPartidas = new ArrayList<>();  // Inicializa lista de historial 
+        jugadores = new ArrayList<>();          // Inicializa lista de jugadores
+    }
     // Métodos
     
     //mostrar menu con animacion de 2 seg
@@ -98,6 +105,27 @@ public class Sistema {
 
     /** Registra un nuevo jugador en el sistema */
     public void registrarJugador(/**Jugador jugador */) {
+        Scanner teclado = new Scanner(System.in);
+        System.out.println("digite el nombre del jugador: ");
+        String nombre = teclado.nextLine();
+        System.out.println("digite edad: ");
+        int edad = teclado.nextInt();
+        teclado.nextLine();// consumir linea
+        System.out.println("digite el alias ");
+        String alias = teclado.nextLine();
+        
+        System.out.print(nombre + edad +alias);
+        teclado.close();
+        Jugador nuevoJugador = new Jugador(nombre, edad, alias, null, false);
+        if (aliasUnico(nuevoJugador)) {
+            jugadores.add(nuevoJugador);  // Alias es único, se puede agregar el jugador
+            System.out.println("Jugador registrado exitosamente.");
+        } else {
+            System.out.println("Error: Ya existe un jugador con el alias '" + alias);
+        }
+        
+
+
         // Agrega un jugador a la lista, verificando que el alias sea único
     }
 
@@ -131,5 +159,15 @@ public class Sistema {
         // Retorna una partida del historial
         return null;
     }
+    /** verificar duplicado de alias*/
+    private boolean aliasUnico(Jugador nuevoJugador) {
+        boolean esUnico = true;  
+        for (Jugador jugador : jugadores) {
+            if (jugador.equals(nuevoJugador)) {
+                esUnico = false;  
+            }
+        }
     
+        return esUnico;
+    }
 }
