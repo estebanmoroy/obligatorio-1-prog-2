@@ -41,6 +41,10 @@ public class Prueba {
         System.out.println(tablero.toString());
          
         Sistema sistema = new Sistema();
+        Jugador nuevoJugador = new Jugador("facu",23,"fada", null, false);
+        Jugador nuevoJugador2 = new Jugador("esteban",24,"este", null, false);
+        sistema.agregarJugador(nuevoJugador);
+        sistema.agregarJugador(nuevoJugador2);
         Scanner teclado = new Scanner(System.in);
         sistema.mostrarBienvenida();
         int opcion = teclado.nextInt();

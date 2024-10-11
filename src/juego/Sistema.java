@@ -23,7 +23,12 @@ public class Sistema {
         jugadores = new ArrayList<>();          // Inicializa lista de jugadores
     }
     // Métodos
+    /** agregar jugador para pruebas */
+    public void agregarJugador(Jugador jugador) {
+        jugadores.add(jugador);
+    }
     
+
     //mostrar menu con animacion de 2 seg
     public void mostrarBienvenida() throws InterruptedException {
         // Mostrar menú de opciones
@@ -131,12 +136,71 @@ public class Sistema {
 
     /** Inicia una nueva partida entre dos jugadores */
     public void jugar() {
+        Jugador jugador1 = this.mostrarYSeleccionarJugador();
+        Jugador jugador2 = this.mostrarYSeleccionarOtroJugador(jugador1);
+
+        
+        Partida partida = new Partida();
+        partida.nuevaPartida(jugador1 , jugador2);
+        System.out.println("jugador 1 es:" + jugador1 + "" + "jugador 2 es: " + jugador2);
         // Inicia el flujo de una partida entre dos jugadores
     }
 
     /** Inicia una partida contra la CPU */
     public void jugarVsCPU() {
+        Jugador jugador1 = this.mostrarYSeleccionarJugador();
         // Inicia una partida contra la computadora
+    }
+
+    /** Muestra los jugadores  */
+    public Jugador  mostrarYSeleccionarJugador() {
+        if (jugadores.isEmpty()) {
+            System.out.println("No hay jugadores disponibles.");
+            return null;
+        }
+
+        System.out.println("Lista de jugadores:");
+        for (int i = 0; i < jugadores.size(); i++) {
+            System.out.println((i + 1) + ". " + jugadores.get(i).getAlias());
+        }
+
+        Scanner teclado = new Scanner(System.in);
+        System.out.println("Selecciona un jugador ingresando el numero correspondiente:");
+        int seleccion = teclado.nextInt() - 1;  // Restamos 1 para que sea el indice correcto
+        //teclado.close();
+        if (seleccion >= 0 && seleccion < jugadores.size()) {
+            return jugadores.get(seleccion);
+        } else {
+            System.out.println("Selección inválida.");
+            return null;
+        }
+        
+        
+    }
+
+    public Jugador mostrarYSeleccionarOtroJugador(Jugador excluido) {
+        if (jugadores.isEmpty()) {
+            System.out.println("No hay jugadores disponibles.");
+            return null;
+        }
+
+        System.out.println("Lista de jugadores :");
+        for (int i = 0; i < jugadores.size(); i++) {
+            if (!jugadores.get(i).equals(excluido)) {
+                System.out.println((i + 1) + ". " + jugadores.get(i).getAlias());
+            }
+        }
+
+        Scanner teclado = new Scanner(System.in);
+        System.out.println("Selecciona otro jugador ingresando el número correspondiente:");
+        int seleccion = teclado.nextInt() - 1; 
+       // teclado.close();
+        if (seleccion >= 0 && seleccion < jugadores.size() && !jugadores.get(seleccion).equals(excluido)) {
+            return jugadores.get(seleccion);
+        } else {
+            System.out.println("Selección inválida o es el mismo jugador.");
+            return null;
+        }
     }
 
     /** Muestra el ranking de los jugadores basado en su puntaje */
