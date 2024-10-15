@@ -46,11 +46,12 @@ public class Prueba {
         Jugador nuevoJugador2 = new Jugador("esteban",24,"este", null, false);
         Sistema.agregarJugador(nuevoJugador);
         Sistema.agregarJugador(nuevoJugador2);
-        Scanner teclado = new Scanner(System.in);
+        //Scanner teclado = new Scanner(System.in);
         Interfaz.mostrarBienvenida();
-        int opcion = teclado.nextInt();
-        Interfaz.procesarOpcion(opcion);
-        teclado.close();
+        Sistema.iniciarMenu();
+        //int opcion = teclado.nextInt();
+        //Interfaz.procesarOpcion(opcion);
+        //teclado.close();
         //asd
     }
 

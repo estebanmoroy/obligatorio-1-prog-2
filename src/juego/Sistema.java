@@ -33,6 +33,56 @@ public class Sistema {
         return historialPartidas;
     }
     
+    /** Inicia menu */
+    public static void iniciarMenu() {
+        Scanner teclado = new Scanner(System.in);
+        int opcion = 0;
+
+        // Bucle que se repite hasta que se elija la opción 5 (Fin)
+        while (opcion != 5) {
+            Interfaz.mostrarMenu();  // Mostrar el menú desde la clase Interfaz
+            System.out.print("Elige una opción: ");
+            opcion = teclado.nextInt();  
+            procesarOpcion(opcion);  // Procesar la opción seleccionada
+        }
+
+        //teclado.close();
+    }
+
+
+    /** agregar jugador para pruebas */
+    /** Procesa la opción seleccionada por el usuario */
+    // Procesa la opción del menú
+    public static void procesarOpcion(int opcion) {
+        if(opcion == 1){
+            System.out.println(" opcion 1:");
+            Interfaz.TextoRegistrarJugador();
+
+        };
+        if(opcion == 2){
+            System.out.println(" opcion 2:");
+            Sistema.jugar();
+
+            
+        };
+        if(opcion == 3){
+            System.out.println(" opcion 3:");
+            Sistema.jugarVsCPU();
+
+            
+        };
+        if(opcion == 4){
+            System.out.println(" opcion 4:");
+            Interfaz.mostrarRanking();
+
+            
+        };
+        if(opcion == 5){
+            System.out.println(" opcion 5:");
+            //salir();
+
+        }
+    }
 
 
 
@@ -68,12 +118,12 @@ public class Sistema {
     
 
     /** Guarda una partida finalizada en el historial */
-    public void guardarPartida(Partida partida) {
+    public static void guardarPartida(Partida partida) {
         // Almacena la partida en el historial
     }
 
     /** Carga una partida del historial según el ID */
-    public Partida cargarPartida(int id) {
+    public static Partida cargarPartida(int id) {
         // Retorna una partida del historial
         return null;
     }

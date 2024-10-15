@@ -48,7 +48,7 @@ public  class Interfaz {
 
         // Limpiar el mensaje de la terminal
         System.out.println("\r" + " ".repeat(espaciosMax + mensaje.length()));
-        mostrarMenu();
+        //mostrarMenu();
     }
     /** muestra el menu con opción  */
     public static void mostrarMenu() {
