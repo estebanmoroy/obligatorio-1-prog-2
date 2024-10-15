@@ -10,6 +10,8 @@ package juego;
  */
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class Sistema {
     // Atributos
@@ -26,13 +28,16 @@ public class Sistema {
 
 
     // Métodos
+
+    /** Getters */
     public static ArrayList<Jugador> getJugadores() {
         return jugadores;
     }
     public static ArrayList<Partida> getHistorialPartidas() {
         return historialPartidas;
     }
-    
+   
+//menu    
     /** Inicia menu */
     public static void iniciarMenu() {
         Scanner teclado = new Scanner(System.in);
@@ -50,9 +55,9 @@ public class Sistema {
     }
 
 
-    /** agregar jugador para pruebas */
+
     /** Procesa la opción seleccionada por el usuario */
-    // Procesa la opción del menú
+   
     public static void procesarOpcion(int opcion) {
         if(opcion == 1){
             System.out.println(" opcion 1:");
@@ -85,8 +90,8 @@ public class Sistema {
     }
 
 
-
-    /** agregar jugador para pruebas */
+//juegos
+    /** agregar jugador  */
     public static  void agregarJugador(Jugador nuevoJugador) {
         if (aliasUnico(nuevoJugador)) {
             jugadores.add(nuevoJugador);  // Alias es único, se puede agregar el jugador
@@ -116,9 +121,10 @@ public class Sistema {
     }
 
     
-
+//partidas
     /** Guarda una partida finalizada en el historial */
     public static void guardarPartida(Partida partida) {
+        historialPartidas.add(partida);
         // Almacena la partida en el historial
     }
 
@@ -138,4 +144,48 @@ public class Sistema {
     
         return esUnico;
     }
+
+
+public static String[][] calcularRanking() {
+    // Obtener la lista de jugadores
+    ArrayList<Jugador> jugadores = Sistema.getJugadores();
+
+    // Crear la matriz: Cada fila tiene 2 columnas [alias, victorias]
+    String[][] ranking = new String[jugadores.size()][2];
+
+    // Inicializar la matriz con los alias de los jugadores y 0 victorias
+    for (int i = 0; i < jugadores.size(); i++) {
+        ranking[i][0] = jugadores.get(i).getAlias();  // Alias
+        ranking[i][1] = "0";  // Inicializamos con 0 victorias
+    }
+
+    // Obtener el historial de partidas
+    ArrayList<Partida> historial = Sistema.getHistorialPartidas();
+
+    // Contar cuántas veces cada jugador ha ganado
+    for (Partida partida : historial) {
+        Jugador ganador = partida.getGanador();
+        if (ganador != null) {
+            // Encontrar el alias del ganador en la matriz y aumentar su contador
+            for (int i = 0; i < ranking.length; i++) {
+                if (ranking[i][0].equals(ganador.getAlias())) {
+                    // Convertir la cantidad de victorias a entero, incrementar y volver a convertir a String
+                    int victorias = Integer.parseInt(ranking[i][1]);
+                    ranking[i][1] = Integer.toString(victorias + 1);
+                }
+            }
+        }
+    }
+
+    // Ordenar la matriz por la columna de victorias (de mayor a menor)
+    Arrays.sort(ranking, new Comparator<String[]>() {
+        @Override
+        public int compare(String[] a, String[] b) {
+            return Integer.compare(Integer.parseInt(b[1]), Integer.parseInt(a[1]));  // Ordenar por victorias (columna 1)
+        }
+    });
+
+    return ranking;
+    }
+
 }

@@ -62,38 +62,7 @@ public  class Interfaz {
         
     }
 
-    /** Procesa la opción seleccionada por el usuario */
-    // Procesa la opción del menú
-    public static void procesarOpcion(int opcion) {
-        if(opcion == 1){
-            System.out.println(" opcion 1:");
-            TextoRegistrarJugador();
-
-        };
-        if(opcion == 2){
-            System.out.println(" opcion 2:");
-            Sistema.jugar();
-
-            
-        };
-        if(opcion == 3){
-            System.out.println(" opcion 3:");
-            Sistema.jugarVsCPU();
-
-            
-        };
-        if(opcion == 4){
-            System.out.println(" opcion 4:");
-            mostrarRanking();
-
-            
-        };
-        if(opcion == 5){
-            System.out.println(" opcion 5:");
-            //salir();
-
-        }
-    }
+    
 
 
     /** Registra un nuevo jugador en el sistema */
@@ -172,7 +141,34 @@ public  class Interfaz {
 
     /** Muestra el ranking de los jugadores basado en su puntaje */
     public static void mostrarRanking() {
-        // Muestra el ranking de los jugadores
+        String[][] ranking = Sistema.calcularRanking();
+
+        // Mostrar el ranking
+        System.out.println("Ranking de jugadores:");
+        for (String[] jugador : ranking) {
+            String alias = jugador[0];
+            int victorias = Integer.parseInt(jugador[1]);
+
+            // Mostrar alias y tantas # como victorias
+            System.out.print(alias + " | ");
+            for (int i = 0; i < victorias; i++) {
+                System.out.print("#");
+            }
+            System.out.println();  // Salto de línea después de cada jugador
+        }
+    
+    }
+    /** Muestra el historial de las Partidas */
+    public static void mostrarPartidas() {
+        ArrayList<Partida> historial = Sistema.getHistorialPartidas();
+    
+        for (int i = 0; i < historial.size(); i++) {
+            Partida partida = historial.get(i);
+            System.out.println("Partida " + (i + 1) + ":");
+            System.out.println("Ganador: " + (partida.getGanador() != null ? partida.getGanador().getAlias() : "Sin ganador"));
+            System.out.println("-----------------------");
+        }
+    
     }
 
     /** Renderiza el tablero actual en el sistema */
