@@ -13,25 +13,44 @@ import java.util.ArrayList;
 
 public class Sistema {
     // Atributos
-    private Partida partidaActual;
-    private ArrayList <Partida> historialPartidas;
-    private ArrayList <Jugador> jugadores;
+    private static  Partida partidaActual;
+    private static  ArrayList <Partida> historialPartidas = new ArrayList<>() ;
+    private static  ArrayList <Jugador> jugadores =  new ArrayList<>() ;
 
     //contructor
-    public Sistema() {
-        historialPartidas = new ArrayList<>();  // Inicializa lista de historial 
-        jugadores = new ArrayList<>();          // Inicializa lista de jugadores
-    }
+    //public  Sistema() {
+      //  historialPartidas = new ArrayList<>();  // Inicializa lista de historial 
+        //jugadores = new ArrayList<>();          // Inicializa lista de jugadores
+    //}
+
+
+
     // Métodos
+    public static ArrayList<Jugador> getJugadores() {
+        return jugadores;
+    }
+    public static ArrayList<Partida> getHistorialPartidas() {
+        return historialPartidas;
+    }
+    
+
+
+
     /** agregar jugador para pruebas */
-    public void agregarJugador(Jugador jugador) {
-        jugadores.add(jugador);
+    public static  void agregarJugador(Jugador nuevoJugador) {
+        if (aliasUnico(nuevoJugador)) {
+            jugadores.add(nuevoJugador);  // Alias es único, se puede agregar el jugador
+            System.out.println("Jugador:" +  nuevoJugador.getAlias() + "registrado exitosamente.");
+        } else {
+            System.out.println("Error: Ya existe un jugador con el alias '" + nuevoJugador.getAlias());
+        }
+       
     }
     
     /** Inicia una nueva partida entre dos jugadores */
-    public void jugar() {
-        Jugador jugador1 = this.mostrarYSeleccionarJugador();
-        Jugador jugador2 = this.mostrarYSeleccionarOtroJugador(jugador1);
+    public static  void jugar() {
+        Jugador jugador1 = Interfaz.mostrarYSeleccionarJugador();
+        Jugador jugador2 = Interfaz.mostrarYSeleccionarOtroJugador(jugador1);
 
         
         Partida partida = new Partida();
@@ -41,8 +60,8 @@ public class Sistema {
     }
 
     /** Inicia una partida contra la CPU */
-    public void jugarVsCPU() {
-        Jugador jugador1 = this.mostrarYSeleccionarJugador();
+    public static  void jugarVsCPU() {
+        Jugador jugador1 = Interfaz.mostrarYSeleccionarJugador();
         // Inicia una partida contra la computadora
     }
 
@@ -59,7 +78,7 @@ public class Sistema {
         return null;
     }
     /** verificar duplicado de alias*/
-    private boolean aliasUnico(Jugador nuevoJugador) {
+    private static  boolean aliasUnico(Jugador nuevoJugador) {
         boolean esUnico = true;  
         for (Jugador jugador : jugadores) {
             if (jugador.equals(nuevoJugador)) {

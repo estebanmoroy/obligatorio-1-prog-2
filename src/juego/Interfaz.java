@@ -13,12 +13,12 @@ package juego;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class Interfaz {
+public  class Interfaz {
     
     // Métodos
 
     //mostrar menu con animacion de 2 seg
-    public void mostrarBienvenida() throws InterruptedException {
+    public static void mostrarBienvenida() throws InterruptedException {
         // Mostrar menú de opciones
         String mensaje = "Bienvenidos";
         int espaciosMax = 7;  // Número de espacios para mover el texto
@@ -51,7 +51,7 @@ public class Interfaz {
         mostrarMenu();
     }
     /** muestra el menu con opción  */
-    public void mostrarMenu() {
+    public static void mostrarMenu() {
         System.out.println("\t digite la opcion deseada:");
         System.out.println("1: Registrar un jugador.");
         System.out.println("2: Jugar al Gran Tateti entre 2 personas.");
@@ -64,21 +64,21 @@ public class Interfaz {
 
     /** Procesa la opción seleccionada por el usuario */
     // Procesa la opción del menú
-    public void procesarOpcion(int opcion) {
+    public static void procesarOpcion(int opcion) {
         if(opcion == 1){
             System.out.println(" opcion 1:");
-            registrarJugador();
+            TextoRegistrarJugador();
 
         };
         if(opcion == 2){
             System.out.println(" opcion 2:");
-            jugar();
+            Sistema.jugar();
 
             
         };
         if(opcion == 3){
             System.out.println(" opcion 3:");
-            jugarVsCPU();
+            Sistema.jugarVsCPU();
 
             
         };
@@ -90,14 +90,14 @@ public class Interfaz {
         };
         if(opcion == 5){
             System.out.println(" opcion 5:");
-            mostrarRanking();
+            //salir();
 
         }
     }
 
 
     /** Registra un nuevo jugador en el sistema */
-    public void registrarJugador(/**Jugador jugador */) {
+    public static void TextoRegistrarJugador(/**Jugador jugador */) {
         Scanner teclado = new Scanner(System.in);
         System.out.println("digite el nombre del jugador: ");
         String nombre = teclado.nextLine();
@@ -110,12 +110,7 @@ public class Interfaz {
         System.out.print(nombre + edad +alias);
         //teclado.close();
         Jugador nuevoJugador = new Jugador(nombre, edad, alias, null, false);
-        if (aliasUnico(nuevoJugador)) {
-            jugadores.add(nuevoJugador);  // Alias es único, se puede agregar el jugador
-            System.out.println("Jugador registrado exitosamente.");
-        } else {
-            System.out.println("Error: Ya existe un jugador con el alias '" + alias);
-        }
+        Sistema.agregarJugador(nuevoJugador);
         
 
 
@@ -125,23 +120,23 @@ public class Interfaz {
     
 
     /** Muestra los jugadores  */
-    public Jugador  mostrarYSeleccionarJugador() {
-        if (jugadores.isEmpty()) {
+    public static Jugador  mostrarYSeleccionarJugador() {
+        if (Sistema.getJugadores().isEmpty()) {
             System.out.println("No hay jugadores disponibles.");
             return null;
         }
 
         System.out.println("Lista de jugadores:");
-        for (int i = 0; i < jugadores.size(); i++) {
-            System.out.println((i + 1) + ". " + jugadores.get(i).getAlias());
+        for (int i = 0; i < Sistema.getJugadores().size(); i++) {
+            System.out.println((i + 1) + ". " + Sistema.getJugadores().get(i).getAlias());
         }
 
         Scanner teclado = new Scanner(System.in);
         System.out.println("Selecciona un jugador ingresando el numero correspondiente:");
         int seleccion = teclado.nextInt() - 1;  // Restamos 1 para que sea el indice correcto
         //teclado.close();
-        if (seleccion >= 0 && seleccion < jugadores.size()) {
-            return jugadores.get(seleccion);
+        if (seleccion >= 0 && seleccion < Sistema.getJugadores().size()) {
+            return Sistema.getJugadores().get(seleccion);
         } else {
             System.out.println("Selección inválida.");
             return null;
@@ -150,16 +145,16 @@ public class Interfaz {
         
     }
 
-    public Jugador mostrarYSeleccionarOtroJugador(Jugador excluido) {
-        if (jugadores.isEmpty()) {
+    public static Jugador mostrarYSeleccionarOtroJugador(Jugador excluido) {
+        if (Sistema.getJugadores().isEmpty()) {
             System.out.println("No hay jugadores disponibles.");
             return null;
         }
 
         System.out.println("Lista de jugadores :");
-        for (int i = 0; i < jugadores.size(); i++) {
-            if (!jugadores.get(i).equals(excluido)) {
-                System.out.println((i + 1) + ". " + jugadores.get(i).getAlias());
+        for (int i = 0; i < Sistema.getJugadores().size(); i++) {
+            if (!Sistema.getJugadores().get(i).equals(excluido)) {
+                System.out.println((i + 1) + ". " + Sistema.getJugadores().get(i).getAlias());
             }
         }
 
@@ -167,8 +162,8 @@ public class Interfaz {
         System.out.println("Selecciona otro jugador ingresando el número correspondiente:");
         int seleccion = teclado.nextInt() - 1; 
        // teclado.close();
-        if (seleccion >= 0 && seleccion < jugadores.size() && !jugadores.get(seleccion).equals(excluido)) {
-            return jugadores.get(seleccion);
+        if (seleccion >= 0 && seleccion < Sistema.getJugadores().size() && !Sistema.getJugadores().get(seleccion).equals(excluido)) {
+            return Sistema.getJugadores().get(seleccion);
         } else {
             System.out.println("Selección inválida o es el mismo jugador.");
             return null;
@@ -176,12 +171,12 @@ public class Interfaz {
     }
 
     /** Muestra el ranking de los jugadores basado en su puntaje */
-    public void mostrarRanking() {
+    public static void mostrarRanking() {
         // Muestra el ranking de los jugadores
     }
 
     /** Renderiza el tablero actual en el sistema */
-    public void renderTablero(Tablero tablero) {
+    public static void renderTablero(Tablero tablero) {
         // Muestra el tablero visualmente
     }
 
