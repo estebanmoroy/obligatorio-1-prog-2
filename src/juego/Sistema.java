@@ -172,7 +172,7 @@ public class Sistema {
 
     /** Inicia una partida contra la CPU */
     public static  void jugarVsCPU() {
-        Jugador jugador1 = Interfaz.mostrarYSeleccionarJugador();
+        Jugador jugador1 = seleccionarJugador();
         // Inicia una partida contra la computadora
     }
 
