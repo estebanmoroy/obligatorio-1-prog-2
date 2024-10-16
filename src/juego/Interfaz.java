@@ -11,7 +11,8 @@ package juego;
 
 
 import java.util.Scanner;
-import java.util.ArrayList;
+//import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 public  class Interfaz {
     
@@ -67,14 +68,28 @@ public  class Interfaz {
 
     /** Registra un nuevo jugador en el sistema */
     public static void TextoRegistrarJugador(/**Jugador jugador */) {
+        String nombre = "";
+        String alias = "";
+        int edad = 0;
+        boolean inputValido = false;
         Scanner teclado = new Scanner(System.in);
         System.out.println("digite el nombre del jugador: ");
-        String nombre = teclado.nextLine();
-        System.out.println("digite edad: ");
-        int edad = teclado.nextInt();
+        nombre = teclado.nextLine();
+
+        while (!inputValido) {
+            try {
+                System.out.println("Digite edad: ");
+                edad = teclado.nextInt();
+                inputValido = true;  
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Debes ingresar un numero  para la edad.");
+                teclado.nextLine();  // Limpiar el buffer del teclado
+            }
+        }
+        
         teclado.nextLine();// consumir linea
         System.out.println("digite el alias ");
-        String alias = teclado.nextLine();
+        alias = teclado.nextLine();
         
         System.out.print(nombre + edad +alias);
         //teclado.close();
@@ -112,6 +127,7 @@ public  class Interfaz {
     
     }
     /** Muestra el historial de las Partidas */
+    /**borrar
     public static void mostrarPartidas() {
         ArrayList<Partida> historial = Sistema.getHistorialPartidas();
     
@@ -123,7 +139,7 @@ public  class Interfaz {
         }
     
     }
-
+*/
     /** Renderiza el tablero actual en el sistema */
     public static void renderTablero(Tablero tablero) {
         // Muestra el tablero visualmente

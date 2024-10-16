@@ -80,7 +80,7 @@ public class Sistema {
         if(opcion == 3){
             System.out.println(" opcion 3:");
             if (jugadores.isEmpty() || jugadores.size() < 1) {
-                System.out.println("Error: debe tener al menos 2 jugadores registrados.");
+                System.out.println("Error: debe tener al menos 1 jugador registrado.");
             } else {
                 Sistema.jugarVsCPU();
             }
@@ -237,14 +237,14 @@ public static String[][] calcularRanking() {
     // Obtener el historial de partidas
     ArrayList<Partida> historial = Sistema.getHistorialPartidas();
 
-    // Contar cuántas veces cada jugador ha ganado
+    // Contar cuántas veces cada jugador gano
     for (Partida partida : historial) {
         Jugador ganador = partida.getGanador();
         if (ganador != null) {
-            // Encontrar el alias del ganador en la matriz y aumentar su contador
+            // Encontrar el alias del ganador en la matriz y aumentar el contador
             for (int i = 0; i < ranking.length; i++) {
                 if (ranking[i][0].equals(ganador.getAlias())) {
-                    // Convertir la cantidad de victorias a entero, incrementar y volver a convertir a String
+                    // Convertir la cantidad de victorias a entero, incrementar y volver a String
                     int victorias = Integer.parseInt(ranking[i][1]);
                     ranking[i][1] = Integer.toString(victorias + 1);
                 }
