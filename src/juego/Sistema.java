@@ -92,7 +92,7 @@ public class Sistema {
     }
 
     // Método para seleccionar un jugador sin exclusión
-    public static Jugador seleccionarJugador() {
+    private static Jugador seleccionarJugadorGenerico(Jugador excluido) {
         if (jugadores.isEmpty()) {
             System.out.println("No hay jugadores disponibles.");
             return null;
@@ -100,44 +100,9 @@ public class Sistema {
 
         System.out.println("Lista de jugadores:");
         for (int i = 0; i < jugadores.size(); i++) {
-            System.out.println((i + 1) + ". " + jugadores.get(i).getAlias());
-        }
-
-        Scanner teclado = new Scanner(System.in);
-        Jugador jugadorSeleccionado = null;
-        boolean seleccionValida = false;
-
-        // Repetir hasta que la selección sea válida
-        while (!seleccionValida) {
-            try {
-                System.out.println("Selecciona un jugador ingresando el número correspondiente:");
-                int seleccion = teclado.nextInt() - 1;  // Ajustar el índice
-
-                jugadorSeleccionado = jugadores.get(seleccion);
-                seleccionValida = true;  // La selección es válida, salir del bucle
-
-            } catch (InputMismatchException e) {
-                System.out.println("Error: Debes ingresar un número válido.");
-                teclado.next();  // Limpiar el buffer de entrada
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Error: Selección fuera de rango.");
-            }
-        }
-
-        return jugadorSeleccionado;
-    }
-
-    // Método para seleccionar un jugador excluyendo uno específico
-    public static Jugador seleccionarJugadorExcluyendo(Jugador excluido) {
-        if (jugadores.isEmpty()) {
-            System.out.println("No hay jugadores disponibles.");
-            return null;
-        }
-
-        System.out.println("Lista de jugadores (excluyendo " + excluido.getAlias() + "):");
-        for (int i = 0; i < jugadores.size(); i++) {
             Jugador jugador = jugadores.get(i);
-            if (!jugador.equals(excluido)) {
+            // Si hay un jugador a excluir, no lo mostramos en la lista
+            if (excluido == null || !jugador.equals(excluido)) {
                 System.out.println((i + 1) + ". " + jugador.getAlias());
             }
         }
@@ -154,8 +119,8 @@ public class Sistema {
 
                 jugadorSeleccionado = jugadores.get(seleccion);
 
-                // Verificar que el jugador seleccionado no sea el excluido
-                if (!jugadorSeleccionado.equals(excluido)) {
+                // Verificar que no se seleccionó al jugador excluido
+                if (excluido == null || !jugadorSeleccionado.equals(excluido)) {
                     seleccionValida = true;  // La selección es válida, salir del bucle
                 } else {
                     System.out.println("Error: El jugador seleccionado está excluido.");
@@ -170,6 +135,17 @@ public class Sistema {
 
         return jugadorSeleccionado;
     }
+
+    // Método para seleccionar un jugador sin exclusión
+    public static Jugador seleccionarJugador() {
+        return seleccionarJugadorGenerico(null);  // Llamar al método sin excluir a ningún jugador
+    }
+
+    // Método para seleccionar un jugador excluyendo uno específico
+    public static Jugador seleccionarJugadorExcluyendo(Jugador excluido) {
+        return seleccionarJugadorGenerico(excluido);  // Llamar al método excluyendo al jugador especificado
+    }
+
 
 //juegos
     /** agregar jugador  */
