@@ -68,19 +68,34 @@ public class Sistema {
         };
         if(opcion == 2){
             System.out.println(" opcion 2:");
-            Sistema.jugar();
+            if (jugadores.isEmpty() || jugadores.size() < 2) {
+                System.out.println("Error: debe tener al menos 2 jugadores registrados.");
+            } else {
+                Sistema.jugar();
+            }
+            
 
             
         };
         if(opcion == 3){
             System.out.println(" opcion 3:");
-            Sistema.jugarVsCPU();
+            if (jugadores.isEmpty() || jugadores.size() < 1) {
+                System.out.println("Error: debe tener al menos 2 jugadores registrados.");
+            } else {
+                Sistema.jugarVsCPU();
+            }
+            
 
             
         };
         if(opcion == 4){
             System.out.println(" opcion 4:");
-            Interfaz.mostrarRanking();
+            if (jugadores.isEmpty()) {
+                System.out.println("No hay jugadores registrados");
+            } else {
+                Interfaz.mostrarRanking();
+            }
+            
 
             
         };
@@ -93,11 +108,12 @@ public class Sistema {
 
     // Método para seleccionar un jugador sin exclusión
     private static Jugador seleccionarJugadorGenerico(Jugador excluido) {
-        if (jugadores.isEmpty()) {
-            System.out.println("No hay jugadores disponibles.");
+        /** Procesa la opción seleccionada por el usuario 
+        if (jugadores.isEmpty() || jugadores.size() < 1) {
+            System.out.println("No hays jugadores disponibles.");
             return null;
         }
-
+        */
         System.out.println("Lista de jugadores:");
         for (int i = 0; i < jugadores.size(); i++) {
             Jugador jugador = jugadores.get(i);
@@ -130,7 +146,7 @@ public class Sistema {
                 teclado.next();  // Limpiar el buffer de entrada
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("Error: Selección fuera de rango.");
-            }
+            } 
         }
 
         return jugadorSeleccionado;
@@ -161,13 +177,16 @@ public class Sistema {
     
     /** Inicia una nueva partida entre dos jugadores */
     public static  void jugar() {
-        Jugador jugador1 = seleccionarJugador();
-        Jugador jugador2 = seleccionarJugadorExcluyendo(jugador1);
         
-        Partida partida = new Partida();
-        partida.nuevaPartida(jugador1 , jugador2);
-        System.out.println("jugador 1 es:" + jugador1 + "" + "jugador 2 es: " + jugador2);
+       
+            Jugador jugador1 = seleccionarJugador();
+            Jugador jugador2 = seleccionarJugadorExcluyendo(jugador1);
+        
+            Partida partida = new Partida();
+            partida.nuevaPartida(jugador1 , jugador2);
+            System.out.println("jugador 1 es:" + jugador1 + "" + "jugador 2 es: " + jugador2);
         // Inicia el flujo de una partida entre dos jugadores
+        
     }
 
     /** Inicia una partida contra la CPU */
