@@ -45,12 +45,12 @@ public class Sistema {
         Scanner teclado = new Scanner(System.in);
         int opcion = 0;
 
-        // Bucle que se repite hasta que se elija la opción 5 (Fin)
+        
         while (opcion != 5) {
-            Interfaz.mostrarMenu();  // Mostrar el menú desde la clase Interfaz
+            Interfaz.mostrarMenu();  
             System.out.print("Elige una opción: ");
             opcion = teclado.nextInt();  
-            procesarOpcion(opcion);  // Procesar la opción seleccionada
+            procesarOpcion(opcion);  
         }
 
         //teclado.close();
@@ -145,7 +145,7 @@ public class Sistema {
                 System.out.println("Error: Debes ingresar un número válido.");
                 teclado.next();  // Limpiar el buffer de entrada
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("Error: Selección fuera de rango.");
+                System.out.println("Error: Seleccion fuera de rango.");
             } 
         }
 
