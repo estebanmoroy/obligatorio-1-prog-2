@@ -12,6 +12,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.InputMismatchException;
+
 
 public class Sistema {
     // Atributos
@@ -89,6 +91,85 @@ public class Sistema {
         }
     }
 
+    // Método para seleccionar un jugador sin exclusión
+    public static Jugador seleccionarJugador() {
+        if (jugadores.isEmpty()) {
+            System.out.println("No hay jugadores disponibles.");
+            return null;
+        }
+
+        System.out.println("Lista de jugadores:");
+        for (int i = 0; i < jugadores.size(); i++) {
+            System.out.println((i + 1) + ". " + jugadores.get(i).getAlias());
+        }
+
+        Scanner teclado = new Scanner(System.in);
+        Jugador jugadorSeleccionado = null;
+        boolean seleccionValida = false;
+
+        // Repetir hasta que la selección sea válida
+        while (!seleccionValida) {
+            try {
+                System.out.println("Selecciona un jugador ingresando el número correspondiente:");
+                int seleccion = teclado.nextInt() - 1;  // Ajustar el índice
+
+                jugadorSeleccionado = jugadores.get(seleccion);
+                seleccionValida = true;  // La selección es válida, salir del bucle
+
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Debes ingresar un número válido.");
+                teclado.next();  // Limpiar el buffer de entrada
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Error: Selección fuera de rango.");
+            }
+        }
+
+        return jugadorSeleccionado;
+    }
+
+    // Método para seleccionar un jugador excluyendo uno específico
+    public static Jugador seleccionarJugadorExcluyendo(Jugador excluido) {
+        if (jugadores.isEmpty()) {
+            System.out.println("No hay jugadores disponibles.");
+            return null;
+        }
+
+        System.out.println("Lista de jugadores (excluyendo " + excluido.getAlias() + "):");
+        for (int i = 0; i < jugadores.size(); i++) {
+            Jugador jugador = jugadores.get(i);
+            if (!jugador.equals(excluido)) {
+                System.out.println((i + 1) + ". " + jugador.getAlias());
+            }
+        }
+
+        Scanner teclado = new Scanner(System.in);
+        Jugador jugadorSeleccionado = null;
+        boolean seleccionValida = false;
+
+        // Repetir hasta que la selección sea válida
+        while (!seleccionValida) {
+            try {
+                System.out.println("Selecciona un jugador ingresando el número correspondiente:");
+                int seleccion = teclado.nextInt() - 1;  // Ajustar el índice
+
+                jugadorSeleccionado = jugadores.get(seleccion);
+
+                // Verificar que el jugador seleccionado no sea el excluido
+                if (!jugadorSeleccionado.equals(excluido)) {
+                    seleccionValida = true;  // La selección es válida, salir del bucle
+                } else {
+                    System.out.println("Error: El jugador seleccionado está excluido.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Debes ingresar un número válido.");
+                teclado.next();  // Limpiar el buffer de entrada
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Error: Selección fuera de rango.");
+            }
+        }
+
+        return jugadorSeleccionado;
+    }
 
 //juegos
     /** agregar jugador  */
@@ -104,9 +185,8 @@ public class Sistema {
     
     /** Inicia una nueva partida entre dos jugadores */
     public static  void jugar() {
-        Jugador jugador1 = Interfaz.mostrarYSeleccionarJugador();
-        Jugador jugador2 = Interfaz.mostrarYSeleccionarOtroJugador(jugador1);
-
+        Jugador jugador1 = seleccionarJugador();
+        Jugador jugador2 = seleccionarJugadorExcluyendo(jugador1);
         
         Partida partida = new Partida();
         partida.nuevaPartida(jugador1 , jugador2);

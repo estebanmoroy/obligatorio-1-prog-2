@@ -89,55 +89,8 @@ public  class Interfaz {
     
 
     /** Muestra los jugadores  */
-    public static Jugador  mostrarYSeleccionarJugador() {
-        if (Sistema.getJugadores().isEmpty()) {
-            System.out.println("No hay jugadores disponibles.");
-            return null;
-        }
+    
 
-        System.out.println("Lista de jugadores:");
-        for (int i = 0; i < Sistema.getJugadores().size(); i++) {
-            System.out.println((i + 1) + ". " + Sistema.getJugadores().get(i).getAlias());
-        }
-
-        Scanner teclado = new Scanner(System.in);
-        System.out.println("Selecciona un jugador ingresando el numero correspondiente:");
-        int seleccion = teclado.nextInt() - 1;  // Restamos 1 para que sea el indice correcto
-        //teclado.close();
-        if (seleccion >= 0 && seleccion < Sistema.getJugadores().size()) {
-            return Sistema.getJugadores().get(seleccion);
-        } else {
-            System.out.println("Selección inválida.");
-            return null;
-        }
-        
-        
-    }
-
-    public static Jugador mostrarYSeleccionarOtroJugador(Jugador excluido) {
-        if (Sistema.getJugadores().isEmpty()) {
-            System.out.println("No hay jugadores disponibles.");
-            return null;
-        }
-
-        System.out.println("Lista de jugadores :");
-        for (int i = 0; i < Sistema.getJugadores().size(); i++) {
-            if (!Sistema.getJugadores().get(i).equals(excluido)) {
-                System.out.println((i + 1) + ". " + Sistema.getJugadores().get(i).getAlias());
-            }
-        }
-
-        Scanner teclado = new Scanner(System.in);
-        System.out.println("Selecciona otro jugador ingresando el número correspondiente:");
-        int seleccion = teclado.nextInt() - 1; 
-       // teclado.close();
-        if (seleccion >= 0 && seleccion < Sistema.getJugadores().size() && !Sistema.getJugadores().get(seleccion).equals(excluido)) {
-            return Sistema.getJugadores().get(seleccion);
-        } else {
-            System.out.println("Selección inválida o es el mismo jugador.");
-            return null;
-        }
-    }
 
     /** Muestra el ranking de los jugadores basado en su puntaje */
     public static void mostrarRanking() {

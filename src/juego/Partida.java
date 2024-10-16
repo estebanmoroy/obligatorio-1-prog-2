@@ -19,7 +19,8 @@ public class Partida {
     private String resultado;
     private Jugador ganador;
 
-    /** Constructor para pruebas facu*/
+    
+    /** Constructor para pruebas facu
     public Partida(Jugador jugadorRojo, Jugador jugadorAzul, Tablero tablero, Jugador turnoActual, boolean finalizada, String resultado, Jugador ganador) {
         this.jugadorRojo = jugadorRojo;
         this.jugadorRojo.setCaracter("X");
@@ -37,6 +38,7 @@ public class Partida {
         this.resultado = resultado;
         this.ganador = ganador;
     }
+    */
     // Métodos
 
     /** Inicia una nueva partida entre los jugadores */
@@ -51,7 +53,7 @@ public class Partida {
         this.tablero = new Tablero();
         this.finalizada = false;
         this.resultado = "";
-        //this.ganador = ganador;
+        this.ganador = ganador;
     }
 
     //getters
