@@ -230,14 +230,14 @@ public static String[][] calcularRanking() {
 
     // Inicializar la matriz con los alias de los jugadores y 0 victorias
     for (int i = 0; i < jugadores.size(); i++) {
-        ranking[i][0] = jugadores.get(i).getAlias();  // Alias
+        ranking[i][0] = jugadores.get(i).getAlias();  
         ranking[i][1] = "0";  // Inicializamos con 0 victorias
     }
 
     // Obtener el historial de partidas
     ArrayList<Partida> historial = Sistema.getHistorialPartidas();
 
-    // Contar cuántas veces cada jugador gano
+    // Contar cuantas veces cada jugador gano
     for (Partida partida : historial) {
         Jugador ganador = partida.getGanador();
         if (ganador != null) {
