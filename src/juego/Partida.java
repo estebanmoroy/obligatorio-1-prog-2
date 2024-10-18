@@ -17,7 +17,28 @@ public class Partida {
     private Jugador turnoActual;
     private boolean finalizada;
     private String resultado;
+    private Jugador ganador;
 
+    
+    /** Constructor para pruebas facu
+    public Partida(Jugador jugadorRojo, Jugador jugadorAzul, Tablero tablero, Jugador turnoActual, boolean finalizada, String resultado, Jugador ganador) {
+        this.jugadorRojo = jugadorRojo;
+        this.jugadorRojo.setCaracter("X");
+        this.jugadorRojo.setJugadaMagicaDisponible(true);
+        
+        this.jugadorAzul = jugadorAzul;
+        this.jugadorAzul.setCaracter("O");
+        this.jugadorAzul.setJugadaMagicaDisponible(true);
+        
+        // Asignar directamente sin verificación de null
+        this.tablero = tablero;
+        this.turnoActual = turnoActual;
+        
+        this.finalizada = finalizada;
+        this.resultado = resultado;
+        this.ganador = ganador;
+    }
+    */
     // Métodos
 
     /** Inicia una nueva partida entre los jugadores */
@@ -32,6 +53,12 @@ public class Partida {
         this.tablero = new Tablero();
         this.finalizada = false;
         this.resultado = "";
+        this.ganador = ganador;
+    }
+
+    //getters
+    public Jugador getGanador() {
+        return ganador;
     }
 
     /** Registra una jugada del jugador en la partida */
@@ -100,6 +127,7 @@ public class Partida {
     /** Finaliza la partida y establece el resultado */
     public void finalizarPartida() {
         finalizada = true;
+        //aplicar ganador
     }
 
     public void abandonarPartida() {
@@ -109,6 +137,7 @@ public class Partida {
         } else {
             resultado = "X";
         }
+        //aplicar ganador
     }
 
     /** Verifica si la partida está finalizada */
