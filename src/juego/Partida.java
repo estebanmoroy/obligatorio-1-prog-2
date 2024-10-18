@@ -57,11 +57,6 @@ public class Partida {
         this.ganador = null;
     }
 
-    // getters
-    public Jugador getGanador() {
-        return ganador;
-    }
-
     /** Registra una jugada del jugador en la partida */
     public boolean registrarJugada(Jugador jugador, String coordenada, String coordenadaMiniTablero) {
         boolean retorno = false;
@@ -102,11 +97,6 @@ public class Partida {
         } else {
             turnoActual = jugadorRojo;
         }
-    }
-
-    /** Retorna el jugador que tiene el turno actual */
-    public Jugador getTurnoActual() {
-        return turnoActual;
     }
 
     /** Realiza la jugada mágica del jugador */
@@ -151,8 +141,21 @@ public class Partida {
         return finalizada;
     }
 
+    /** Retorna el jugador que tiene el turno actual */
+    public Jugador getTurnoActual() {
+        return turnoActual;
+    }
+
     public Tablero getTablero() {
         return tablero;
+    }
+
+    public Jugador getGanador() {
+        return ganador;
+    }
+
+    public String getResultado() {
+        return resultado;
     }
 
 }

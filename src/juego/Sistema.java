@@ -176,9 +176,81 @@ public class Sistema {
 
         Partida partida = new Partida();
         partida.Partida(jugador1, jugador2);
-        System.out.println("jugador 1 es:" + jugador1 + "" + "jugador 2 es: " + jugador2);
-        // Inicia el flujo de una partida entre dos jugadores
-        solicitarJugada(partida);
+        System.out.println("Jugador 1 es: " + jugador1.getAlias() + " (X)");
+        System.out.println("Jugador 2 es: " + jugador2.getAlias() + " (O)");
+
+        // Loop principal del juego
+        while (!partida.isPartidaFinalizada()) {
+            Jugador jugadorActual = partida.getTurnoActual();
+            System.out.println("Turno de " + jugadorActual.getAlias() + " (" + jugadorActual.getCaracter() + ")");
+
+            boolean jugadaValida = false;
+            while (!jugadaValida) {
+                String[] jugada = solicitarJugada();
+                if (jugada[0].equalsIgnoreCase("X")) {
+                    System.out.println(jugadorActual.getAlias() + " ha decidido abandonar la partida.");
+                    partida.abandonarPartida();
+                    break;
+                }
+                if (jugada[0].equalsIgnoreCase("M")) {
+                    if (jugadorActual.isJugadaMagicaDisponible()) {
+                        partida.jugadaMagica(jugadorActual, jugada[1]);
+                        System.out.println(jugadorActual.getAlias() + " ha usado su jugada mágica en " + jugada[1]);
+                        jugadaValida = true;
+                    } else {
+                        System.out.println("Error: " + jugadorActual.getAlias()
+                                + " ya ha usado su jugada mágica en esta partida.");
+                    }
+                } else {
+                    jugadaValida = partida.registrarJugada(jugadorActual, jugada[0], jugada[1]);
+                    if (!jugadaValida) {
+                        System.out.println("Jugada inválida. Intente de nuevo.");
+                    }
+                }
+            }
+
+            System.out.println("Estado actual del tablero:");
+            System.out.println(partida.getTablero().toString());
+
+            partida.verificarGanador();
+        }
+
+        // Mostrar resultado final
+        String resultado = partida.getResultado();
+        if (resultado.equals("Empate")) {
+            System.out.println("La partida ha terminado en empate.");
+        } else {
+            Jugador ganador;
+            if (resultado.equals("X")) {
+                ganador = jugador1;
+            } else {
+                ganador = jugador2;
+            }
+            System.out.println("El ganador es: " + ganador.getAlias() + " (" + resultado + ")");
+        }
+
+        // Guardar la partida en el historial
+        guardarPartida(partida);
+
+        // Actualizar el ranking
+        calcularRanking();
+
+    }
+
+    /**
+     * Muestra mensaje de opciones, lee un input del teclado y retorna el output
+     * correspondiente
+     */
+    private static String[] solicitarJugada() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(
+                "Ingrese su jugada 'coordenada,miniCoordenada' o 'M,coordenada' para jugada mágica o 'A' para abandonar:");
+        String input = scanner.nextLine().toUpperCase();
+        if (input.equals("A")) {
+            return new String[] { "A" };
+        }
+        String[] coordenadas = input.split(",");
+        return coordenadas;
     }
 
     /** Inicia una partida contra la CPU */
@@ -198,36 +270,6 @@ public class Sistema {
     public static Partida cargarPartida(int id) {
         // Retorna una partida del historial
         return null;
-    }
-
-    /** Lee un input del teclado, registra la jugada y la imprime en pantalla */
-    public static void solicitarJugada(Partida partida) {
-        Scanner teclado = new Scanner(System.in);
-        boolean jugadaValida = false;
-
-        while (!jugadaValida) {
-            try {
-                System.out.println("Ingrese la coordenada (ej. A1): ");
-                String coordenada = teclado.nextLine().toUpperCase();
-
-                System.out.println("Ingrese la coordenada del mini-tablero (ej. B2): ");
-                String coordenadaMiniTablero = teclado.nextLine().toUpperCase();
-
-                jugadaValida = partida.registrarJugada(partida.getTurnoActual(), coordenada, coordenadaMiniTablero);
-
-                if (!jugadaValida) {
-                    System.out.println("Jugada inválida. Intente de nuevo.");
-                } else {
-                    System.out.println(
-                            "Jugada registrada en tablero: " + coordenada + "Mini-tablero: " + coordenadaMiniTablero);
-                    partida.ejecutarJugada(partida.getTurnoActual(), coordenada, coordenadaMiniTablero);
-                    System.out.println(partida.getTablero().toString());
-                }
-
-            } catch (Exception e) {
-                System.out.println("Error: Entrada inválida. Intente de nuevo.");
-            }
-        }
     }
 
     /** verificar duplicado de alias */
