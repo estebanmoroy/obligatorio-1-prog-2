@@ -19,30 +19,31 @@ public class Partida {
     private String resultado;
     private Jugador ganador;
 
-    
-    /** Constructor para pruebas facu
-    public Partida(Jugador jugadorRojo, Jugador jugadorAzul, Tablero tablero, Jugador turnoActual, boolean finalizada, String resultado, Jugador ganador) {
-        this.jugadorRojo = jugadorRojo;
-        this.jugadorRojo.setCaracter("X");
-        this.jugadorRojo.setJugadaMagicaDisponible(true);
-        
-        this.jugadorAzul = jugadorAzul;
-        this.jugadorAzul.setCaracter("O");
-        this.jugadorAzul.setJugadaMagicaDisponible(true);
-        
-        // Asignar directamente sin verificación de null
-        this.tablero = tablero;
-        this.turnoActual = turnoActual;
-        
-        this.finalizada = finalizada;
-        this.resultado = resultado;
-        this.ganador = ganador;
-    }
-    */
+    /**
+     * Constructor para pruebas facu
+     * public Partida(Jugador jugadorRojo, Jugador jugadorAzul, Tablero tablero,
+     * Jugador turnoActual, boolean finalizada, String resultado, Jugador ganador) {
+     * this.jugadorRojo = jugadorRojo;
+     * this.jugadorRojo.setCaracter("X");
+     * this.jugadorRojo.setJugadaMagicaDisponible(true);
+     * 
+     * this.jugadorAzul = jugadorAzul;
+     * this.jugadorAzul.setCaracter("O");
+     * this.jugadorAzul.setJugadaMagicaDisponible(true);
+     * 
+     * // Asignar directamente sin verificación de null
+     * this.tablero = tablero;
+     * this.turnoActual = turnoActual;
+     * 
+     * this.finalizada = finalizada;
+     * this.resultado = resultado;
+     * this.ganador = ganador;
+     * }
+     */
     // Métodos
 
     /** Inicia una nueva partida entre los jugadores */
-    public void nuevaPartida(Jugador jugadorRojo, Jugador jugadorAzul) {
+    public void Partida(Jugador jugadorRojo, Jugador jugadorAzul) {
         this.jugadorRojo = jugadorRojo;
         this.jugadorRojo.setCaracter("X");
         this.jugadorRojo.setJugadaMagicaDisponible(true);
@@ -53,23 +54,28 @@ public class Partida {
         this.tablero = new Tablero();
         this.finalizada = false;
         this.resultado = "";
-        this.ganador = ganador;
+        this.ganador = null;
     }
 
-    //getters
+    // getters
     public Jugador getGanador() {
         return ganador;
     }
 
     /** Registra una jugada del jugador en la partida */
-    public void registrarJugada(Jugador jugador, String coordenada, String coordenadaMiniTablero) {
+    public boolean registrarJugada(Jugador jugador, String coordenada, String coordenadaMiniTablero) {
+        boolean retorno = false;
         if (tablero.esJugadaValida(coordenada, coordenadaMiniTablero)) {
             ejecutarJugada(jugador, coordenada, coordenadaMiniTablero);
             verificarGanador();
             if (!finalizada) {
                 cambiarTurno();
             }
+            retorno = true;
+        } else {
+            retorno = false;
         }
+        return retorno;
     }
 
     /** Ejecuta una jugada en el tablero */
@@ -127,7 +133,7 @@ public class Partida {
     /** Finaliza la partida y establece el resultado */
     public void finalizarPartida() {
         finalizada = true;
-        //aplicar ganador
+        // aplicar ganador
     }
 
     public void abandonarPartida() {
@@ -137,12 +143,16 @@ public class Partida {
         } else {
             resultado = "X";
         }
-        //aplicar ganador
+        // aplicar ganador
     }
 
     /** Verifica si la partida está finalizada */
     public boolean isPartidaFinalizada() {
         return finalizada;
+    }
+
+    public Tablero getTablero() {
+        return tablero;
     }
 
 }
