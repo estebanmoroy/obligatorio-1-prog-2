@@ -20,12 +20,6 @@ public class Sistema {
     private static ArrayList<Partida> historialPartidas = new ArrayList<>();
     private static ArrayList<Jugador> jugadores = new ArrayList<>();
 
-    // contructor
-    // public Sistema() {
-    // historialPartidas = new ArrayList<>(); // Inicializa lista de historial
-    // jugadores = new ArrayList<>(); // Inicializa lista de jugadores
-    // }
-
     // Métodos
 
     /** Getters */
@@ -50,7 +44,6 @@ public class Sistema {
             procesarOpcion(opcion);
         }
 
-        // teclado.close();
     }
 
     /** Procesa la opción seleccionada por el usuario */
@@ -243,14 +236,49 @@ public class Sistema {
      */
     private static String[] solicitarJugada() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println(
-                "Ingrese su jugada 'coordenada,miniCoordenada' o 'M,coordenada' para jugada mágica o 'A' para abandonar:");
-        String input = scanner.nextLine().toUpperCase();
-        if (input.equals("A")) {
-            return new String[] { "A" };
+        while (true) {
+            try {
+                System.out.println(
+                        "Ingrese su jugada 'coordenada,miniCoordenada' o 'M,coordenada' para jugada mágica o 'A' para abandonar:");
+                String input = scanner.nextLine().trim().toUpperCase();
+
+                if (input.isEmpty()) {
+                    throw new IllegalArgumentException("La entrada no puede estar vacía.");
+                }
+
+                if (input.equals("A")) {
+                    return new String[] { "A" };
+                }
+
+                String[] coordenadas = input.split(",");
+
+                if (coordenadas.length != 2) {
+                    throw new IllegalArgumentException(
+                            "Formato incorrecto. Use 'coordenada,miniCoordenada' o 'M,coordenada'.");
+                }
+
+                // Validar formato de coordenadas
+                if (!coordenadas[0].equals("M")) {
+                    validarFormatoCoordenada(coordenadas[0]);
+                    validarFormatoCoordenada(coordenadas[1]);
+                } else {
+                    validarFormatoCoordenada(coordenadas[1]);
+                }
+
+                return coordenadas;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: " + e.getMessage() + " Por favor, intente de nuevo.");
+            } catch (Exception e) {
+                System.out.println("Error inesperado: " + e.getMessage() + " Por favor, intente de nuevo.");
+            }
         }
-        String[] coordenadas = input.split(",");
-        return coordenadas;
+    }
+
+    private static void validarFormatoCoordenada(String coordenada) {
+        if (!coordenada.matches("[A-C][1-3]")) {
+            throw new IllegalArgumentException(
+                    "Coordenada inválida: " + coordenada + ". Debe ser de la forma 'A1', 'B2', etc.");
+        }
     }
 
     /** Inicia una partida contra la CPU */
@@ -263,7 +291,6 @@ public class Sistema {
     /** Guarda una partida finalizada en el historial */
     public static void guardarPartida(Partida partida) {
         historialPartidas.add(partida);
-        // Almacena la partida en el historial
     }
 
     /** Carga una partida del historial según el ID */
