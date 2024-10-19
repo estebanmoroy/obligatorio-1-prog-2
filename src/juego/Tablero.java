@@ -6,7 +6,7 @@ package juego;
 
 /**
  *
- * @author Esteban Moroy 338885, Facundo Martínez
+ * @author Esteban Moroy 338885, Facundo Martínez 342426
  */
 public class Tablero {
 
