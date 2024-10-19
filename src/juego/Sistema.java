@@ -16,7 +16,6 @@ import java.util.InputMismatchException;
 
 public class Sistema {
     // Atributos
-    private static Partida partidaActual;
     private static ArrayList<Partida> historialPartidas = new ArrayList<>();
     private static ArrayList<Jugador> jugadores = new ArrayList<>();
 
