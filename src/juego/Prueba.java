@@ -37,7 +37,7 @@ public class Prueba {
         System.out.println(miniTablero.filaToString(0, "O"));
 
         Tablero tablero = new Tablero();
-        // tablero.setGanadoresMiniTableros(miniTablero);
+        tablero.setGanadoresMiniTableros(miniTablero);
         miniTablero.jugada("C1", "X");
         tablero.setMiniTablero(0, 0, miniTablero);
 
