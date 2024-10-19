@@ -6,7 +6,7 @@ package juego;
 
 /**
  *
- * @author Esteban Moroy 338885, Facundo Martinez
+ * @author Esteban Moroy 338885, Facundo Martinez 342426
  */
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -39,8 +39,14 @@ public class Sistema {
         while (opcion != 5) {
             Interfaz.mostrarMenu();
             System.out.print("Elige una opción: ");
-            opcion = teclado.nextInt();
-            procesarOpcion(opcion);
+            try {
+                opcion = teclado.nextInt();
+                procesarOpcion(opcion);
+            } catch (InputMismatchException e) {
+                // Maneja el caso donde el usuario ingresa un valor que no es un número
+                System.out.println("Favor digite opcion valida");
+                teclado.nextLine(); // Limpia la entrada incorrecta
+            }
         }
 
     }
@@ -166,8 +172,8 @@ public class Sistema {
         Jugador jugador1 = seleccionarJugador();
         Jugador jugador2 = seleccionarJugadorExcluyendo(jugador1);
 
-        Partida partida = new Partida();
-        partida.Partida(jugador1, jugador2);
+        Partida partida = new Partida(jugador1, jugador2);
+        //partida.Partida(jugador1, jugador2);
         System.out.println("Jugador 1 es: " + jugador1.getAlias() + " (X)");
         System.out.println("Jugador 2 es: " + jugador2.getAlias() + " (O)");
 
@@ -246,13 +252,16 @@ public class Sistema {
                 ganador = jugador2;
             }
             System.out.println("El ganador es: " + ganador.getAlias() + " (" + resultado + ")");
+            guardarPartida(partida);
+
+            
         }
 
         // Guardar la partida en el historial
-        guardarPartida(partida);
-
+        //guardarPartida(partida);
+        //no se necesita actualizar
         // Actualizar el ranking
-        calcularRanking();
+        //calcularRanking();
 
     }
 
@@ -325,8 +334,93 @@ public class Sistema {
 
     /** Inicia una partida contra la CPU */
     public static void jugarVsCPU() {
-        Jugador jugador1 = seleccionarJugador();
         // Inicia una partida contra la computadora
+        Jugador jugador1 = seleccionarJugador();
+        JugadorCPU cpu = (JugadorCPU) jugadores.get(0); //cast para jugadorCPU
+        //Partida partida = new Partida();
+        //partida.Partida(jugador1, cpu);
+        System.out.println("Jugador 1 es: " + jugador1.getAlias() + " (X)");
+        System.out.println("Jugador 2 es: " + "CPU" + " (O)");
+
+        String coordenadaTablero = null;
+        boolean esPrimerMovimiento = true;
+
+        
+        // Loop principal del juego
+        // while (!partida.isPartidaFinalizada()) {
+        //     Jugador jugadorActual = partida.getTurnoActual();
+        //     System.out.println("Turno de " + jugadorActual.getAlias() + " (" + jugadorActual.getCaracter() + ")");
+
+        //     boolean jugadaValida = false;
+        //     while (!jugadaValida) {
+        //         /*
+        //          * Si es la primera jugada en la partida también solicita la coordenada del
+        //          * tablero a jugar
+        //          */
+        //         String[] jugada;
+        //         if (esPrimerMovimiento) {
+        //             jugada = solicitarJugada(null); // Solicita coordenada y mini-coordenada
+        //         } else {
+        //             jugada = solicitarJugada(coordenadaTablero); // Solicita solo mini-coordenada
+        //         }
+        //         // Manejo de jugada de abandono
+        //         if (jugada[0].equals("A")) {
+        //             System.out.println(jugadorActual.getAlias() + " ha decidido abandonar la partida.");
+        //             partida.abandonarPartida();
+        //             guardarPartida(partida);
+        //             return;
+        //         }
+        //         // Manejo de jugada mágica
+        //         if (jugada[0].equalsIgnoreCase("M")) {
+        //             if (jugadorActual.isJugadaMagicaDisponible()) {
+        //                 partida.jugadaMagica(jugadorActual, jugada[1]);
+        //                 System.out.println(jugadorActual.getAlias() + " ha usado su jugada mágica en " + jugada[1]);
+        //                 jugadaValida = true;
+        //             } else {
+        //                 System.out.println("Error: " + jugadorActual.getAlias()
+        //                         + " ya ha usado su jugada mágica en esta partida.");
+        //             }
+        //         } else {
+        //             if (esPrimerMovimiento) {
+        //                 jugadaValida = partida.registrarJugada(jugadorActual, jugada[0], jugada[1]);
+        //                 if (jugadaValida) {
+        //                     coordenadaTablero = jugada[1];
+        //                     esPrimerMovimiento = false;
+        //                 }
+        //             } else {
+        //                 jugadaValida = partida.registrarJugada(jugadorActual, coordenadaTablero, jugada[0]);
+        //                 if (jugadaValida) {
+        //                     coordenadaTablero = jugada[0];
+        //                 }
+        //             }
+
+        //             if (!jugadaValida) {
+        //                 System.out.println("Jugada inválida. Intente de nuevo.");
+        //             }
+        //         }
+        //     }
+
+        //     System.out.println("Estado actual del tablero:");
+        //     System.out.println(partida.getTablero().toString());
+
+        //     partida.verificarGanador();
+        // }
+
+        // // Mostrar resultado final
+        // String resultado = partida.getResultado();
+        // if (resultado.equals("Empate")) {
+        //     System.out.println("La partida ha terminado en empate.");
+        // } else {
+        //     Jugador ganador;
+        //     if (resultado.equals("X")) {
+        //         ganador = jugador1;
+        //     } else {
+        //         ganador = jugador2;
+        //     }
+        //     System.out.println("El ganador es: " + ganador.getAlias() + " (" + resultado + ")");
+        // }
+        
+        
     }
 
     // partidas
