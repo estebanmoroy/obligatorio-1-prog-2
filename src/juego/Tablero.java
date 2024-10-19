@@ -18,6 +18,8 @@ public class Tablero {
     private static final String RESET = "\u001B[0m";
     private static final String ROJO = "\u001B[31m";
     private static final String AZUL = "\u001B[34m";
+    private static final String FONDO_VERDE = "\u001B[42m";
+    private static final String FONDO_AMARILLO = "\u001B[43m";
 
     // Métodos
 
@@ -132,32 +134,73 @@ public class Tablero {
         this.ganadoresMiniTableros = ganadoresMiniTableros;
     }
 
-    @Override
     /** Muestra el tablero en su estado actual **/
-    public String toString() {
+    public String toString(String coordenadaAResaltar) {
         String retorno = "";
-        String lineaAsteriscos = "*".repeat(25) + "\n";
-        String lineaHorizontalCompleta = "*";
+        String lineaAsteriscosCompleta = "";
+        String lineaHorizontalCompleta = "";
 
         for (int i = 0; i < 3; i++) {
-            retorno += lineaAsteriscos;
 
             for (int j = 0; j < 3; j++) {
-                retorno += "* ";
                 for (int k = 0; k < 3; k++) {
+                    // Revisa si el casillero actual es el que hay que resaltar
+                    String ast = FONDO_VERDE + "*" + RESET;
+                    if (coordenadaAResaltar != null) {
+                        if (getFila(coordenadaAResaltar) == i && getColumna(coordenadaAResaltar) == k) {
+                            ast = FONDO_AMARILLO + "*" + RESET;
+                        }
+                    }
+
+                    // Si es la primera columna agrega un asterisco al principio
+                    if (k == 0) {
+                        retorno += ast + " ";
+                        lineaHorizontalCompleta += ast;
+                    }
+
+                    // Determina el ganador del miniTablero para luego pintarlo del color
+                    // correspondiente
                     String ganadorMiniTablero = this.ganadoresMiniTableros.getCasillero(i, k);
                     if (ganadorMiniTablero == "indeterminado" || ganadorMiniTablero == "E") {
                         ganadorMiniTablero = null;
                     }
-                    retorno += this.tableroPrincipal[i][k].filaToString(j, ganadorMiniTablero) + " * ";
-                    lineaHorizontalCompleta += lineaHorizontal(ganadorMiniTablero) + "*";
+
+                    // Si es el miniTablero a resaltar, remueve el asterisco anterior y agrega uno
+                    // del color correspondiente
+                    if (coordenadaAResaltar != null) {
+                        if (getFila(coordenadaAResaltar) == i && getColumna(coordenadaAResaltar) == k) {
+                            // Son 11 caracteres en lugar de 2 por el código ASCII
+                            retorno = retorno.substring(0, retorno.length() - 11) + ast + " ";
+                            if (getColumna(coordenadaAResaltar) == 0) {
+                                lineaAsteriscosCompleta = "";
+                            } else {
+                                lineaHorizontalCompleta = lineaHorizontalCompleta.substring(0,
+                                        lineaHorizontalCompleta.length() - 11) + RESET + ast;
+                            }
+                        }
+                    }
+
+                    lineaHorizontalCompleta += lineaHorizontal(ganadorMiniTablero) + ast;
+                    retorno += this.tableroPrincipal[i][k].filaToString(j, ganadorMiniTablero) + " " + ast + " ";
+                    lineaAsteriscosCompleta += ast.repeat(8);
+
+                    if (k == 2) {
+                        lineaAsteriscosCompleta += ast;
+                    }
+
                 }
                 retorno += "\n";
                 retorno += lineaHorizontalCompleta + "\n";
-                lineaHorizontalCompleta = "*";
+                lineaHorizontalCompleta = "";
+
+                if (j == 1) {
+                    lineaAsteriscosCompleta = "";
+                }
+
             }
+            retorno += lineaAsteriscosCompleta + "\n";
+            lineaAsteriscosCompleta = "";
         }
-        retorno += lineaAsteriscos;
 
         return retorno;
     }

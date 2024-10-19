@@ -37,11 +37,11 @@ public class Prueba {
         System.out.println(miniTablero.filaToString(0, "O"));
 
         Tablero tablero = new Tablero();
-        tablero.setGanadoresMiniTableros(miniTablero);
+        // tablero.setGanadoresMiniTableros(miniTablero);
         miniTablero.jugada("C1", "X");
         tablero.setMiniTablero(0, 0, miniTablero);
 
-        System.out.println(tablero.toString());
+        System.out.println(tablero.toString("C3"));
 
         // Sistema sistema = new Sistema();
         // Interfaz interfaz = new Interfaz();

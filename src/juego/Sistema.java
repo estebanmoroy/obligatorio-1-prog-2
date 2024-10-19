@@ -228,7 +228,7 @@ public class Sistema {
             }
 
             System.out.println("Estado actual del tablero:");
-            System.out.println(partida.getTablero().toString());
+            System.out.println(partida.getTablero().toString(coordenadaTablero));
 
             partida.verificarGanador();
         }
