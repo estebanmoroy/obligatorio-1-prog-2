@@ -12,6 +12,11 @@ package juego;
 public class MiniTablero {
     private String[][] miniTablero;
 
+    // Códigos de color ANSI
+    private static final String RESET = "\u001B[0m";
+    private static final String ROJO = "\u001B[31m";
+    private static final String AZUL = "\u001B[34m";
+
     // Constructor
     public MiniTablero() {
         this.miniTablero = new String[3][3];
@@ -145,21 +150,57 @@ public class MiniTablero {
         this.miniTablero = miniTablero;
     }
 
-    public String filaToString(int numeroDeFila) {
+    public String filaToString(int numeroDeFila, String ganador) {
         String retorno = "";
+        String color = null;
+
+        if (ganador == "X") {
+            color = ROJO;
+        } else if (ganador == "O") {
+            color = AZUL;
+        }
 
         for (int i = 0; i < this.miniTablero[numeroDeFila].length; i++) {
-            if (this.miniTablero[numeroDeFila][i].isEmpty()) {
+            String contenido = this.miniTablero[numeroDeFila][i];
+            if (contenido.isEmpty()) {
                 retorno += " "; // Si el casillero está vacío agrega un espacio
             } else {
-                retorno += this.miniTablero[numeroDeFila][i]; // Si no está vacío agrega el valor
+                if (color != null) {
+                    // Si se especifica un color, colorea todo (incluidos los separadores)
+                    retorno += color + contenido + RESET;
+                } else {
+                    // Si no se especifica color, usa rojo para X y azul para O
+                    if (contenido.equals("X")) {
+                        retorno += ROJO + contenido + RESET;
+                    } else if (contenido.equals("O")) {
+                        retorno += AZUL + contenido + RESET;
+                    } else {
+                        retorno += contenido;
+                    }
+                }
             }
             if (i < this.miniTablero[numeroDeFila].length - 1) {
-                retorno += "|"; // Agrega las barras divisorias entre columnas
+                if (color != null) {
+                    retorno += color + "|" + RESET; // Colorea el separador si se especifica un color
+                } else {
+                    retorno += "|"; // Agrega las barras divisorias entre columnas sin color
+                }
             }
         }
         return retorno;
 
+    }
+
+    public String toStringColor(String color) {
+        String retorno = "";
+        for (int i = 0; i < this.miniTablero.length; i++) {
+            if (!(i < 2)) { // Revisa si no es la ultima columna
+                retorno += this.filaToString(i, color);
+            } else {
+                retorno += this.filaToString(i, color) + "\n"; // En caso de que si le agrega un salto de liena
+            }
+        }
+        return retorno;
     }
 
     @Override
@@ -167,9 +208,9 @@ public class MiniTablero {
         String retorno = "";
         for (int i = 0; i < this.miniTablero.length; i++) {
             if (!(i < 2)) { // Revisa si no es la ultima columna
-                retorno += this.filaToString(i);
+                retorno += this.filaToString(i, null);
             } else {
-                retorno += this.filaToString(i) + "\n"; // En caso de que si le agrega un salto de liena
+                retorno += this.filaToString(i, null) + "\n"; // En caso de que si le agrega un salto de liena
             }
         }
         return retorno;

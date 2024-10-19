@@ -136,7 +136,7 @@ public class Tablero {
             for (int j = 0; j < 3; j++) {
                 retorno += "* ";
                 for (int k = 0; k < 3; k++) {
-                    retorno += this.tableroPrincipal[i][k].filaToString(j) + " * ";
+                    retorno += this.tableroPrincipal[i][k].filaToString(j, null) + " * ";
                 }
                 retorno += "\n";
                 retorno += lineaHorizontal;
