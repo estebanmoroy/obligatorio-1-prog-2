@@ -24,7 +24,7 @@ public class Main {
     }
 
     private static void inicializarJuego() {
-        System.out.println("Inicializando el Gran Tateti...");
+        System.out.println("Inicializando Gran Tateti...");
 
         // Crear y agregar jugadores precargados
         JugadorCPU cpu = new JugadorCPU("CPU", 0, "cpu", null, true);
