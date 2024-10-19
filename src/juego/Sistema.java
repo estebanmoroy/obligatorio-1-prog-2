@@ -171,6 +171,9 @@ public class Sistema {
         System.out.println("Jugador 1 es: " + jugador1.getAlias() + " (X)");
         System.out.println("Jugador 2 es: " + jugador2.getAlias() + " (O)");
 
+        String coordenadaTablero = null;
+        boolean esPrimerMovimiento = true;
+
         // Loop principal del juego
         while (!partida.isPartidaFinalizada()) {
             Jugador jugadorActual = partida.getTurnoActual();
@@ -178,12 +181,23 @@ public class Sistema {
 
             boolean jugadaValida = false;
             while (!jugadaValida) {
-                String[] jugada = solicitarJugada();
-                if (jugada[0].equalsIgnoreCase("X")) {
+                /*
+                 * Si es la primera jugada en la partida también solicita la coordenada del
+                 * tablero a jugar
+                 */
+                String[] jugada;
+                if (esPrimerMovimiento) {
+                    jugada = solicitarJugada(null); // Solicita coordenada y mini-coordenada
+                } else {
+                    jugada = solicitarJugada(coordenadaTablero); // Solicita solo mini-coordenada
+                }
+                // Manejo de jugada de abandono
+                if (jugada[0].equals("A")) {
                     System.out.println(jugadorActual.getAlias() + " ha decidido abandonar la partida.");
                     partida.abandonarPartida();
-                    break;
+                    return;
                 }
+                // Manejo de jugada mágica
                 if (jugada[0].equalsIgnoreCase("M")) {
                     if (jugadorActual.isJugadaMagicaDisponible()) {
                         partida.jugadaMagica(jugadorActual, jugada[1]);
@@ -194,7 +208,19 @@ public class Sistema {
                                 + " ya ha usado su jugada mágica en esta partida.");
                     }
                 } else {
-                    jugadaValida = partida.registrarJugada(jugadorActual, jugada[0], jugada[1]);
+                    if (esPrimerMovimiento) {
+                        jugadaValida = partida.registrarJugada(jugadorActual, jugada[0], jugada[1]);
+                        if (jugadaValida) {
+                            coordenadaTablero = jugada[1];
+                            esPrimerMovimiento = false;
+                        }
+                    } else {
+                        jugadaValida = partida.registrarJugada(jugadorActual, coordenadaTablero, jugada[0]);
+                        if (jugadaValida) {
+                            coordenadaTablero = jugada[0];
+                        }
+                    }
+
                     if (!jugadaValida) {
                         System.out.println("Jugada inválida. Intente de nuevo.");
                     }
@@ -233,12 +259,18 @@ public class Sistema {
      * Muestra mensaje de opciones, lee un input del teclado y retorna el output
      * correspondiente
      */
-    private static String[] solicitarJugada() {
+    private static String[] solicitarJugada(String coordenadaTablero) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             try {
-                System.out.println(
-                        "Ingrese su jugada 'coordenada,miniCoordenada' o 'M,coordenada' para jugada mágica o 'A' para abandonar:");
+                if (coordenadaTablero == null) {
+                    System.out.println(
+                            "Ingrese su jugada 'coordenada,miniCoordenada' , 'M,coordenada' para jugada mágica o 'A' para abandonar:");
+                } else {
+                    System.out.println("Ingrese su jugada en el mini-tablero " + coordenadaTablero +
+                            " ('A1'-'C3'), 'M' para jugada mágica o 'A' para abandonar:");
+                }
+
                 String input = scanner.nextLine().trim().toUpperCase();
 
                 if (input.isEmpty()) {
@@ -249,22 +281,32 @@ public class Sistema {
                     return new String[] { "A" };
                 }
 
-                String[] coordenadas = input.split(",");
-
-                if (coordenadas.length != 2) {
-                    throw new IllegalArgumentException(
-                            "Formato incorrecto. Use 'coordenada,miniCoordenada' o 'M,coordenada'.");
+                if (input.startsWith("M")) {
+                    String[] parts = input.split(",");
+                    if (parts.length != 2) {
+                        throw new IllegalArgumentException("Para la jugada mágica, use el formato 'M,coordenada'.");
+                    }
+                    validarFormatoCoordenada(parts[1]);
+                    return new String[] { "M", parts[1] };
                 }
 
-                // Validar formato de coordenadas
-                if (!coordenadas[0].equals("M")) {
+                if (coordenadaTablero == null) {
+                    String[] coordenadas = input.split(",");
+                    if (coordenadas.length != 2) {
+                        throw new IllegalArgumentException("Formato incorrecto. Use 'coordenada,miniCoordenada'.");
+                    }
                     validarFormatoCoordenada(coordenadas[0]);
                     validarFormatoCoordenada(coordenadas[1]);
+                    return coordenadas;
                 } else {
-                    validarFormatoCoordenada(coordenadas[1]);
+                    // Para jugadas subsiguientes, aceptamos una sola coordenada
+                    if (input.contains(",")) {
+                        throw new IllegalArgumentException(
+                                "Para jugadas subsiguientes, ingrese solo la miniCoordenada.");
+                    }
+                    validarFormatoCoordenada(input);
+                    return new String[] { input };
                 }
-
-                return coordenadas;
             } catch (IllegalArgumentException e) {
                 System.out.println("Error: " + e.getMessage() + " Por favor, intente de nuevo.");
             } catch (Exception e) {
