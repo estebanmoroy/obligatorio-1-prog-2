@@ -40,6 +40,10 @@ public class MiniTablero {
         }
     }
 
+    public String getCasillero(int fila, int columna) {
+        return this.miniTablero[fila][columna];
+    }
+
     // Sobrecarga del método limpiar para usar en ganadoresMiniTableros
     public void limpiarMiniTablero() {
         for (int i = 0; i < 3; i++) {

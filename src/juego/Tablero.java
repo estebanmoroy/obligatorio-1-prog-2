@@ -14,6 +14,11 @@ public class Tablero {
     private MiniTablero[][] tableroPrincipal; // Matriz para almacenar los mini-tableros
     private MiniTablero ganadoresMiniTableros; // Minitablero para registrar los ganadores
 
+    // Colores ANSI
+    private static final String RESET = "\u001B[0m";
+    private static final String ROJO = "\u001B[31m";
+    private static final String AZUL = "\u001B[34m";
+
     // Métodos
 
     /** Inicializa un nuevo tablero */
@@ -123,12 +128,16 @@ public class Tablero {
         return this.ganadoresMiniTableros;
     }
 
+    public void setGanadoresMiniTableros(MiniTablero ganadoresMiniTableros) {
+        this.ganadoresMiniTableros = ganadoresMiniTableros;
+    }
+
     @Override
     /** Muestra el tablero en su estado actual **/
     public String toString() {
         String retorno = "";
         String lineaAsteriscos = "*".repeat(25) + "\n";
-        String lineaHorizontal = "*--+-+--*--+-+--*--+-+--*\n";
+        String lineaHorizontalCompleta = "*";
 
         for (int i = 0; i < 3; i++) {
             retorno += lineaAsteriscos;
@@ -136,13 +145,32 @@ public class Tablero {
             for (int j = 0; j < 3; j++) {
                 retorno += "* ";
                 for (int k = 0; k < 3; k++) {
-                    retorno += this.tableroPrincipal[i][k].filaToString(j, null) + " * ";
+                    String ganadorMiniTablero = this.ganadoresMiniTableros.getCasillero(i, k);
+                    if (ganadorMiniTablero == "indeterminado" || ganadorMiniTablero == "E") {
+                        ganadorMiniTablero = null;
+                    }
+                    retorno += this.tableroPrincipal[i][k].filaToString(j, ganadorMiniTablero) + " * ";
+                    lineaHorizontalCompleta += lineaHorizontal(ganadorMiniTablero) + "*";
                 }
                 retorno += "\n";
-                retorno += lineaHorizontal;
+                retorno += lineaHorizontalCompleta + "\n";
+                lineaHorizontalCompleta = "*";
             }
         }
         retorno += lineaAsteriscos;
+
+        return retorno;
+    }
+
+    public String lineaHorizontal(String ganador) {
+        String linea = "--+-+--";
+        String retorno = "";
+
+        if (ganador == "X") {
+            retorno += ROJO + linea + RESET;
+        } else if (ganador == "O") {
+            retorno += AZUL + linea + RESET;
+        }
 
         return retorno;
     }
