@@ -195,6 +195,7 @@ public class Sistema {
                 if (jugada[0].equals("A")) {
                     System.out.println(jugadorActual.getAlias() + " ha decidido abandonar la partida.");
                     partida.abandonarPartida();
+                    guardarPartida(partida);
                     return;
                 }
                 // Manejo de jugada mágica

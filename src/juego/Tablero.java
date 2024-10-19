@@ -39,6 +39,7 @@ public class Tablero {
         if (jugada && miniTablero.determinarGanador() != "indeterminado") {
             // En caso de que si, registra el ganador en ganadoresMiniTableros
             this.ganadoresMiniTableros.jugada(coordenada, miniTablero.determinarGanador());
+            System.out.println("primer minitablero ganado");
         }
 
         return jugada;

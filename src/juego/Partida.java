@@ -105,12 +105,18 @@ public class Partida {
     }
 
     public void abandonarPartida() {
-        finalizarPartida();
+        
         if (turnoActual.equals(jugadorRojo)) {
+            System.out.println("ganador jugador2: " + jugadorAzul);
             resultado = "O";
+            ganador=jugadorAzul;
         } else {
             resultado = "X";
+            System.out.println("ganador jugador1" + jugadorRojo);
+            ganador=jugadorRojo;
         }
+        finalizarPartida();
+        
     }
 
     /** Verifica si la partida está finalizada */
