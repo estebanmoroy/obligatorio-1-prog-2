@@ -35,6 +35,9 @@ public class Sistema {
     public static void iniciarMenu() {
         Scanner teclado = new Scanner(System.in);
         int opcion = 0;
+        //Creo cpu posicion 0
+        //JugadorCPU cpu = new JugadorCPU("CPU", 0, "cpu", null, true);
+        //Sistema.agregarJugador(cpu);
 
         while (opcion != 5) {
             Interfaz.mostrarMenu();
@@ -333,11 +336,12 @@ public class Sistema {
     }
 
     /** Inicia una partida contra la CPU */
+        
     public static void jugarVsCPU() {
         // Inicia una partida contra la computadora
         Jugador jugador1 = seleccionarJugador();
         JugadorCPU cpu = (JugadorCPU) jugadores.get(0); //cast para jugadorCPU
-        //Partida partida = new Partida();
+        Partida partida = new Partida(jugador1, cpu);
         //partida.Partida(jugador1, cpu);
         System.out.println("Jugador 1 es: " + jugador1.getAlias() + " (X)");
         System.out.println("Jugador 2 es: " + "CPU" + " (O)");
@@ -347,78 +351,77 @@ public class Sistema {
 
         
         // Loop principal del juego
-        // while (!partida.isPartidaFinalizada()) {
-        //     Jugador jugadorActual = partida.getTurnoActual();
-        //     System.out.println("Turno de " + jugadorActual.getAlias() + " (" + jugadorActual.getCaracter() + ")");
+         while (!partida.isPartidaFinalizada()) {
+             Jugador jugadorActual = partida.getTurnoActual();
+             System.out.println("Turno de " + jugadorActual.getAlias() + " (" + jugadorActual.getCaracter() + ")");
 
-        //     boolean jugadaValida = false;
-        //     while (!jugadaValida) {
-        //         /*
-        //          * Si es la primera jugada en la partida también solicita la coordenada del
-        //          * tablero a jugar
-        //          */
-        //         String[] jugada;
-        //         if (esPrimerMovimiento) {
-        //             jugada = solicitarJugada(null); // Solicita coordenada y mini-coordenada
-        //         } else {
-        //             jugada = solicitarJugada(coordenadaTablero); // Solicita solo mini-coordenada
-        //         }
-        //         // Manejo de jugada de abandono
-        //         if (jugada[0].equals("A")) {
-        //             System.out.println(jugadorActual.getAlias() + " ha decidido abandonar la partida.");
-        //             partida.abandonarPartida();
-        //             guardarPartida(partida);
-        //             return;
-        //         }
-        //         // Manejo de jugada mágica
-        //         if (jugada[0].equalsIgnoreCase("M")) {
-        //             if (jugadorActual.isJugadaMagicaDisponible()) {
-        //                 partida.jugadaMagica(jugadorActual, jugada[1]);
-        //                 System.out.println(jugadorActual.getAlias() + " ha usado su jugada mágica en " + jugada[1]);
-        //                 jugadaValida = true;
-        //             } else {
-        //                 System.out.println("Error: " + jugadorActual.getAlias()
-        //                         + " ya ha usado su jugada mágica en esta partida.");
-        //             }
-        //         } else {
-        //             if (esPrimerMovimiento) {
-        //                 jugadaValida = partida.registrarJugada(jugadorActual, jugada[0], jugada[1]);
-        //                 if (jugadaValida) {
-        //                     coordenadaTablero = jugada[1];
-        //                     esPrimerMovimiento = false;
-        //                 }
-        //             } else {
-        //                 jugadaValida = partida.registrarJugada(jugadorActual, coordenadaTablero, jugada[0]);
-        //                 if (jugadaValida) {
-        //                     coordenadaTablero = jugada[0];
-        //                 }
-        //             }
+             boolean jugadaValida = false;
+             while (!jugadaValida) {
+                 /*
+                  * Si es la primera jugada en la partida también solicita la coordenada del
+                  * tablero a jugar
+                  */
+                 String[] jugada;
+                 
+                 if (esPrimerMovimiento) {
+                     jugada = solicitarJugada(null); // Solicita coordenada y mini-coordenada
+                 } else {
+                     
+                     
+                // Verifica si el jugador actual es la CPU
+                    if (jugadorActual.equals(cpu)) {
+                        jugada = new String[]{cpu.generarJugada()}; // CPU genera solo la mini-coordenada
+                        } else {
+                            jugada = solicitarJugada(coordenadaTablero); // Solicita solo mini-coordenada
+                                }
+                     
+                     
+                        }
+                 // Manejo de jugada de abandono
+                 if (jugada[0].equals("A")) {
+                     System.out.println(jugadorActual.getAlias() + " ha decidido abandonar la partida.");
+                     partida.abandonarPartida();
+                     guardarPartida(partida);
+                     return;
+                 }
+                 if (esPrimerMovimiento) {
+                         jugadaValida = partida.registrarJugada(jugadorActual, jugada[0], jugada[1]);
+                         if (jugadaValida) {
+                             coordenadaTablero = jugada[1];
+                             esPrimerMovimiento = false;
+                         }
+                     } else {
+                         jugadaValida = partida.registrarJugada(jugadorActual, coordenadaTablero, jugada[0]);
+                         if (jugadaValida) {
+                             coordenadaTablero = jugada[0];
+                         }
+                     }
 
-        //             if (!jugadaValida) {
-        //                 System.out.println("Jugada inválida. Intente de nuevo.");
-        //             }
-        //         }
-        //     }
+                     if (!jugadaValida) {
+                         System.out.println("Jugada inválida. Intente de nuevo.");
+                     }
+                 //}
+             }
 
-        //     System.out.println("Estado actual del tablero:");
-        //     System.out.println(partida.getTablero().toString());
+             System.out.println("Estado actual del tablero:");
+             System.out.println(partida.getTablero().toString());
 
-        //     partida.verificarGanador();
-        // }
+             partida.verificarGanador();
+         }
 
-        // // Mostrar resultado final
-        // String resultado = partida.getResultado();
-        // if (resultado.equals("Empate")) {
-        //     System.out.println("La partida ha terminado en empate.");
-        // } else {
-        //     Jugador ganador;
-        //     if (resultado.equals("X")) {
-        //         ganador = jugador1;
-        //     } else {
-        //         ganador = jugador2;
-        //     }
-        //     System.out.println("El ganador es: " + ganador.getAlias() + " (" + resultado + ")");
-        // }
+         // Mostrar resultado final
+         String resultado = partida.getResultado();
+         if (resultado.equals("Empate")) {
+             System.out.println("La partida ha terminado en empate.");
+         } else {
+             Jugador ganador;
+             if (resultado.equals("X")) {
+                 ganador = jugador1;
+             } else {
+                 ganador = cpu;
+             }
+             System.out.println("El ganador es: " + ganador.getAlias() + " (" + resultado + ")");
+         }
         
         
     }

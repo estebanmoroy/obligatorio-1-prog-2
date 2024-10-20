@@ -15,7 +15,7 @@ public class JugadorCPU extends Jugador {
         super(nombre, edad, alias, caracter, jugadaMagicaDisponible);
     }
 
-    /**
+     /**
      * Genera una jugada para la CPU y retorna un array de Strings con valores de
      * coordenada y miniCoordenada
      **/
@@ -32,13 +32,11 @@ public class JugadorCPU extends Jugador {
 
 
 //Solo minicoordenada
-public String generarJugada(Tablero tablero) {
-    // Simplemente se retorna una miniCoordenada aleatoria
+public String generarJugada() {
+    // Simplemente se retorna una mini-coordenada aleatoria
     String[] miniCoordenadas = { "A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3" };
+    return miniCoordenadas[(int) (Math.random() * miniCoordenadas.length)];
+}
 
-    String miniCoordenada = miniCoordenadas[(int) (Math.random() * miniCoordenadas.length)];
-
-    return miniCoordenada;
-    }
 
 }
