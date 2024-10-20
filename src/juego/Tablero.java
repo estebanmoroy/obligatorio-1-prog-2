@@ -168,7 +168,6 @@ public class Tablero {
                             || ganadorMiniTablero.isEmpty()) {
                         ganadorMiniTablero = null;
                         cantidadDeCaracteresARemover = 9;
-                        System.out.println("entra");
                     }
 
                     // Si es el miniTablero a resaltar, remueve el asterisco anterior y agrega uno
