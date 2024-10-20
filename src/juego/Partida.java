@@ -113,12 +113,12 @@ public class Partida {
     public void abandonarPartida() {
         
         if (turnoActual.equals(jugadorRojo)) {
-            System.out.println("ganador jugador2: " + jugadorAzul);
+            System.out.println("ganador jugador2: " + jugadorAzul.getAlias());
             resultado = "O";
             ganador=jugadorAzul;
         } else {
             resultado = "X";
-            System.out.println("ganador jugador1" + jugadorRojo);
+            System.out.println("ganador jugador1: " + jugadorRojo.getAlias());
             ganador=jugadorRojo;
         }
         finalizarPartida();
