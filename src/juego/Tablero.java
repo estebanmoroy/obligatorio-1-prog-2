@@ -137,7 +137,6 @@ public class Tablero {
     /** Muestra el tablero en su estado actual **/
     public String toString(String coordenadaAResaltar) {
         String retorno = "";
-        String lineaAsteriscosCompleta = "";
         String lineaHorizontalCompleta = "";
 
         for (int i = 0; i < 3; i++) {
@@ -160,46 +159,66 @@ public class Tablero {
 
                     // Determina el ganador del miniTablero para luego pintarlo del color
                     // correspondiente
+                    // y determina la cantidad de caracteres a remover en caso de que esté pintado
+                    // Son 11 caracteres en lugar de 2 por el código ASCII que pinta el asterisco
+                    int cantidadDeCaracteresARemover = 11;
                     String ganadorMiniTablero = this.ganadoresMiniTableros.getCasillero(i, k);
-                    if (ganadorMiniTablero == "indeterminado" || ganadorMiniTablero == "E") {
+                    if (ganadorMiniTablero == "indeterminado" || ganadorMiniTablero == "E"
+                            || ganadorMiniTablero.isEmpty()) {
                         ganadorMiniTablero = null;
+                        cantidadDeCaracteresARemover = 9;
+                        System.out.println("entra");
                     }
 
                     // Si es el miniTablero a resaltar, remueve el asterisco anterior y agrega uno
                     // del color correspondiente
                     if (coordenadaAResaltar != null) {
                         if (getFila(coordenadaAResaltar) == i && getColumna(coordenadaAResaltar) == k) {
-                            // Son 11 caracteres en lugar de 2 por el código ASCII
-                            retorno = retorno.substring(0, retorno.length() - 11) + ast + " ";
+                            retorno = retorno.substring(0, retorno.length() - cantidadDeCaracteresARemover) + ast + " ";
                             if (getColumna(coordenadaAResaltar) == 0) {
-                                lineaAsteriscosCompleta = "";
+                                lineaHorizontalCompleta = ast;
                             } else {
                                 lineaHorizontalCompleta = lineaHorizontalCompleta.substring(0,
-                                        lineaHorizontalCompleta.length() - 11) + RESET + ast;
+                                        lineaHorizontalCompleta.length() - cantidadDeCaracteresARemover) + RESET + ast;
                             }
                         }
                     }
 
                     lineaHorizontalCompleta += lineaHorizontal(ganadorMiniTablero) + ast;
                     retorno += this.tableroPrincipal[i][k].filaToString(j, ganadorMiniTablero) + " " + ast + " ";
-                    lineaAsteriscosCompleta += ast.repeat(8);
-
-                    if (k == 2) {
-                        lineaAsteriscosCompleta += ast;
-                    }
 
                 }
+
                 retorno += "\n";
                 retorno += lineaHorizontalCompleta + "\n";
                 lineaHorizontalCompleta = "";
 
-                if (j == 1) {
-                    lineaAsteriscosCompleta = "";
-                }
-
             }
-            retorno += lineaAsteriscosCompleta + "\n";
-            lineaAsteriscosCompleta = "";
+
+            // Manejo de lineas de asteriscos divisoras
+            if (coordenadaAResaltar != null) {
+                if (getFila(coordenadaAResaltar) == i || getFila(coordenadaAResaltar) - 1 == i) {
+                    retorno += lineaAsteriscos(coordenadaAResaltar);
+                } else {
+                    retorno += lineaAsteriscos(null);
+                }
+            } else {
+                retorno += lineaAsteriscos(null);
+            }
+
+            // Agregar la linea de asteriscos en la primera linea
+            if (i == 0) {
+                if (coordenadaAResaltar != null) {
+                    if (getFila(coordenadaAResaltar) == 0) {
+                        retorno = lineaAsteriscos(coordenadaAResaltar) + retorno;
+                    } else {
+                        retorno = lineaAsteriscos(null) + retorno;
+                    }
+                } else {
+                    retorno = lineaAsteriscos(null) + retorno;
+                }
+            }
+
         }
 
         return retorno;
@@ -213,9 +232,33 @@ public class Tablero {
             retorno += ROJO + linea + RESET;
         } else if (ganador == "O") {
             retorno += AZUL + linea + RESET;
+        } else {
+            retorno += linea;
         }
 
         return retorno;
+    }
+
+    public String lineaAsteriscos(String coordenada) {
+        String asteriscos = "";
+        String retorno = "";
+
+        if (coordenada == null) {
+            retorno = FONDO_VERDE + "*".repeat(25) + RESET + "\n";
+        } else {
+            int nroColumna = getColumna(coordenada);
+            for (int i = 0; i < 3; i++) {
+                if (nroColumna == i) {
+                    asteriscos += FONDO_AMARILLO + "*".repeat(9) + RESET;
+                } else {
+                    asteriscos += FONDO_VERDE + "*".repeat(8) + RESET;
+                }
+            }
+            retorno += asteriscos + "\n";
+        }
+
+        return retorno;
+
     }
 
 }
