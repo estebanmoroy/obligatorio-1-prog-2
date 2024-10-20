@@ -110,7 +110,7 @@ public class Sistema {
          * }
          */
         System.out.println("Lista de jugadores:");
-        for (int i = 0; i < jugadores.size(); i++) {
+        for (int i = 1; i < jugadores.size(); i++) {
             Jugador jugador = jugadores.get(i);
             // Si hay un jugador a excluir, no lo mostramos en la lista
             if (excluido == null || !jugador.equals(excluido)) {
@@ -339,8 +339,10 @@ public class Sistema {
         
     public static void jugarVsCPU() {
         // Inicia una partida contra la computadora
-        Jugador jugador1 = seleccionarJugador();
+        
         JugadorCPU cpu = (JugadorCPU) jugadores.get(0); //cast para jugadorCPU
+        Jugador jugador1 = seleccionarJugador();
+        
         Partida partida = new Partida(jugador1, cpu);
         //partida.Partida(jugador1, cpu);
         System.out.println("Jugador 1 es: " + jugador1.getAlias() + " (X)");
@@ -352,6 +354,7 @@ public class Sistema {
         
         // Loop principal del juego
          while (!partida.isPartidaFinalizada()) {
+            jugador1.setJugadaMagicaDisponible(false);
              Jugador jugadorActual = partida.getTurnoActual();
              System.out.println("Turno de " + jugadorActual.getAlias() + " (" + jugadorActual.getCaracter() + ")");
 
@@ -377,56 +380,63 @@ public class Sistema {
                      
                      
                         }
-                 // Manejo de jugada de abandono
-                 if (jugada[0].equals("A")) {
-                     System.out.println(jugadorActual.getAlias() + " ha decidido abandonar la partida.");
-                     partida.abandonarPartida();
-                     guardarPartida(partida);
-                     return;
-                 }
-                 if (esPrimerMovimiento) {
-                         jugadaValida = partida.registrarJugada(jugadorActual, jugada[0], jugada[1]);
-                         if (jugadaValida) {
-                             coordenadaTablero = jugada[1];
-                             esPrimerMovimiento = false;
-                         }
-                     } else {
-                         jugadaValida = partida.registrarJugada(jugadorActual, coordenadaTablero, jugada[0]);
-                         if (jugadaValida) {
-                             coordenadaTablero = jugada[0];
-                         }
-                     }
-
-                     if (!jugadaValida) {
-                         System.out.println("Jugada inválida. Intente de nuevo.");
-                     }
-                 //}
-             }
-
-             System.out.println("Estado actual del tablero:");
+                        if (jugada[0].equals("A")) {
+                            System.out.println(jugadorActual.getAlias() + " ha decidido abandonar la partida.");
+                            partida.abandonarPartida();
+                            guardarPartida(partida);
+                            return;
+                        }
+                        if (jugada[0].equalsIgnoreCase("M")) {
+                            if (jugadorActual.isJugadaMagicaDisponible()) {
+                                partida.jugadaMagica(jugadorActual, jugada[1]);
+                                System.out.println(jugadorActual.getAlias() + " ha usado su jugada mágica en " + jugada[1]);
+                                jugadaValida = true;
+                            } else {
+                                System.out.println("Error: " + jugadorActual.getAlias()
+                                        + " No se permite usar jugada magica.");
+                            }
+                        } else {
+                            if (esPrimerMovimiento) {
+                                jugadaValida = partida.registrarJugada(jugadorActual, jugada[0], jugada[1]);
+                                if (jugadaValida) {
+                                    coordenadaTablero = jugada[1];
+                                    esPrimerMovimiento = false;
+                                }
+                            } else {
+                                jugadaValida = partida.registrarJugada(jugadorActual, coordenadaTablero, jugada[0]);
+                                if (jugadaValida) {
+                                    coordenadaTablero = jugada[0];
+                                }
+                            }
+                            if (jugada[0].equals("A")) {
+                                System.out.println(jugadorActual.getAlias() + " ha decidido abandonar la partida.");
+                                partida.abandonarPartida();
+                                guardarPartida(partida);
+                                return;
+                            }
+                        }
+                    }
+                    System.out.println("Estado actual del tablero:");
              //System.out.println(partida.getTablero().toString());
-             System.out.println(partida.getTablero().toString(coordenadaTablero));
-
-
-             partida.verificarGanador();
-         }
-
-         // Mostrar resultado final
-         String resultado = partida.getResultado();
-         if (resultado.equals("Empate")) {
-             System.out.println("La partida ha terminado en empate.");
-         } else {
-             Jugador ganador;
-             if (resultado.equals("X")) {
-                 ganador = jugador1;
-             } else {
-                 ganador = cpu;
+                    System.out.println(partida.getTablero().toString(coordenadaTablero));
+                    partida.verificarGanador();
+                }
+                // Mostrar resultado final
+                String resultado = partida.getResultado();
+                if (resultado.equals("Empate")) {
+                System.out.println("La partida ha terminado en empate.");
+                } else {
+                    Jugador ganador;
+                    if (resultado.equals("X")) {
+                    ganador = jugador1;
+                    } else {
+                        ganador = cpu;
+                    }
+                System.out.println("El ganador es: " + ganador.getAlias() + " (" + resultado + ")");
              }
-             System.out.println("El ganador es: " + ganador.getAlias() + " (" + resultado + ")");
-         }
         
         
-    }
+        }
 
     // partidas
     /** Guarda una partida finalizada en el historial */
