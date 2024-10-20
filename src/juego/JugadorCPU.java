@@ -6,7 +6,7 @@ package juego;
 
 /**
  *
- * @author Esteban Moroy 338885, Facundo Martinez
+ * @author Esteban Moroy 338885, Facundo Martinez 342426
  */
 
 public class JugadorCPU extends Jugador {
