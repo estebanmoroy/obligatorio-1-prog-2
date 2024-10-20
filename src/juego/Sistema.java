@@ -36,8 +36,8 @@ public class Sistema {
         Scanner teclado = new Scanner(System.in);
         int opcion = 0;
         //Creo cpu posicion 0
-        //JugadorCPU cpu = new JugadorCPU("CPU", 0, "cpu", null, true);
-        //Sistema.agregarJugador(cpu);
+        JugadorCPU cpu = new JugadorCPU("cpu", 0, "CPU", null, false);
+        Sistema.agregarJugador(cpu);
 
         while (opcion != 5) {
             Interfaz.mostrarMenu();
@@ -65,7 +65,7 @@ public class Sistema {
         ;
         if (opcion == 2) {
             System.out.println(" opcion 2:");
-            if (jugadores.isEmpty() || jugadores.size() < 2) {
+            if (jugadores.isEmpty() || jugadores.size() < 3) {
                 System.out.println("Error: debe tener al menos 2 jugadores registrados.");
             } else {
                 Sistema.jugar();
@@ -75,7 +75,7 @@ public class Sistema {
         ;
         if (opcion == 3) {
             System.out.println(" opcion 3:");
-            if (jugadores.isEmpty() || jugadores.size() < 1) {
+            if (jugadores.isEmpty() || jugadores.size() < 2) {
                 System.out.println("Error: debe tener al menos 1 jugador registrado.");
             } else {
                 Sistema.jugarVsCPU();
