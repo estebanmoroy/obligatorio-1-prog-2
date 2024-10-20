@@ -63,8 +63,14 @@ public class Tablero {
 
     /** Ejecuta la jugada mágica en el mini-tablero */
     public void limpiarMiniTablero(String coordenada) {
-        MiniTablero miniTablero = this.tableroPrincipal[getFila(coordenada)][getColumna(coordenada)];
-        miniTablero.limpiarMiniTablero();
+        int fila = getFila(coordenada);
+        int columna = getColumna(coordenada);
+
+        // Limpiar el mini-tablero correspondiente
+        this.tableroPrincipal[fila][columna].limpiarMiniTablero();
+
+        // Limpiar el casillero correspondiente en ganadoresMiniTableros
+        this.ganadoresMiniTableros.limpiarCasillero(coordenada);
     }
 
     /** Verifica si el tablero está completo */

@@ -53,6 +53,13 @@ public class MiniTablero {
         }
     }
 
+    // limpiar un casillero específico
+    public void limpiarCasillero(String coordenada) {
+        int fila = getFila(coordenada);
+        int columna = getColumna(coordenada);
+        this.miniTablero[fila][columna] = "";
+    }
+
     public boolean estaCasilleroVacio(String coordenada) {
         int fila = getFila(coordenada);
         int columna = getColumna(coordenada);

@@ -22,7 +22,7 @@ public class Partida {
     // Métodos
 
     /** Inicia una nueva partida entre los jugadores */
-    public  Partida(Jugador jugadorRojo, Jugador jugadorAzul) {
+    public Partida(Jugador jugadorRojo, Jugador jugadorAzul) {
         this.jugadorRojo = jugadorRojo;
         this.jugadorRojo.setCaracter("X");
         this.jugadorRojo.setJugadaMagicaDisponible(true);
@@ -35,6 +35,7 @@ public class Partida {
         this.resultado = "";
         this.ganador = null;
     }
+
     public void setGanador(Jugador ganador) {
         this.ganador = ganador;
     }
@@ -87,7 +88,13 @@ public class Partida {
             tablero.limpiarMiniTablero(coordenada);
             jugador.setJugadaMagicaDisponible(false);
         }
-        cambiarTurno();
+        // Verificar si hay un ganador después de la jugada mágica
+        verificarGanador();
+
+        // Cambiar el turno solo si la partida no ha finalizado
+        if (!finalizada) {
+            cambiarTurno();
+        }
     }
 
     /** Verifica si hay un ganador en la partida */
@@ -111,18 +118,18 @@ public class Partida {
     }
 
     public void abandonarPartida() {
-        
+
         if (turnoActual.equals(jugadorRojo)) {
             System.out.println("ganador jugador2: " + jugadorAzul.getAlias());
             resultado = "O";
-            ganador=jugadorAzul;
+            ganador = jugadorAzul;
         } else {
             resultado = "X";
             System.out.println("ganador jugador1: " + jugadorRojo.getAlias());
-            ganador=jugadorRojo;
+            ganador = jugadorRojo;
         }
         finalizarPartida();
-        
+
     }
 
     /** Verifica si la partida está finalizada */
