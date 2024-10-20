@@ -6,7 +6,7 @@ package juego;
 
 /**
  *
- * @author Esteban Moroy 338885, Facundo Martinez
+ * @author Esteban Moroy 338885, Facundo Martinez 342426
  */
 public class Partida {
 
@@ -22,7 +22,7 @@ public class Partida {
     // Métodos
 
     /** Inicia una nueva partida entre los jugadores */
-    public void Partida(Jugador jugadorRojo, Jugador jugadorAzul) {
+    public  Partida(Jugador jugadorRojo, Jugador jugadorAzul) {
         this.jugadorRojo = jugadorRojo;
         this.jugadorRojo.setCaracter("X");
         this.jugadorRojo.setJugadaMagicaDisponible(true);
@@ -34,6 +34,9 @@ public class Partida {
         this.finalizada = false;
         this.resultado = "";
         this.ganador = null;
+    }
+    public void setGanador(Jugador ganador) {
+        this.ganador = ganador;
     }
 
     /** Registra una jugada del jugador en la partida */
@@ -90,9 +93,12 @@ public class Partida {
     /** Verifica si hay un ganador en la partida */
     public void verificarGanador() {
         String ganador = tablero.getGanadoresMiniTableros().determinarGanador();
+        System.out.println("chequeo de ganador");
+        System.out.println(ganador);
         if (!ganador.equals("indeterminado")) {
             finalizarPartida();
             resultado = turnoActual.getCaracter();
+            setGanador(turnoActual);
         } else if (tablero.estaLleno()) {
             finalizarPartida();
             resultado = "Empate";
@@ -105,12 +111,18 @@ public class Partida {
     }
 
     public void abandonarPartida() {
-        finalizarPartida();
+        
         if (turnoActual.equals(jugadorRojo)) {
+            System.out.println("ganador jugador2: " + jugadorAzul);
             resultado = "O";
+            ganador=jugadorAzul;
         } else {
             resultado = "X";
+            System.out.println("ganador jugador1" + jugadorRojo);
+            ganador=jugadorRojo;
         }
+        finalizarPartida();
+        
     }
 
     /** Verifica si la partida está finalizada */

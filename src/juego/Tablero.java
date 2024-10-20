@@ -6,7 +6,7 @@ package juego;
 
 /**
  *
- * @author Esteban Moroy 338885, Facundo Martínez
+ * @author Esteban Moroy 338885, Facundo Martínez 342426
  */
 public class Tablero {
 
@@ -46,6 +46,7 @@ public class Tablero {
         if (jugada && miniTablero.determinarGanador() != "indeterminado") {
             // En caso de que si, registra el ganador en ganadoresMiniTableros
             this.ganadoresMiniTableros.jugada(coordenada, miniTablero.determinarGanador());
+            System.out.println("primer minitablero ganado");
         }
 
         return jugada;
