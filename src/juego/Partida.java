@@ -98,7 +98,7 @@ public class Partida {
         if (!ganador.equals("indeterminado")) {
             finalizarPartida();
             resultado = turnoActual.getCaracter();
-            ganador=turnoActual.getAlias();
+            setGanador(turnoActual);
         } else if (tablero.estaLleno()) {
             finalizarPartida();
             resultado = "Empate";
