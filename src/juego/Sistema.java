@@ -179,6 +179,8 @@ public class Sistema {
 
         mostrarResultadoFinal(partida);
         guardarPartida(partida);
+        System.out.println(partida.getTablero().toString(coordenadaTablero));
+
     }
 
     private static String[] solicitarJugada(String coordenadaTablero) {
