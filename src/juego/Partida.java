@@ -2,90 +2,82 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package juego;
 
 /**
- *
- * @author Esteban Moroy 338885, Facundo Martinez 342426
+ * Representa una partida del juego Gran Tateti.
  */
 public class Partida {
+    // Constantes
+    private static final String CARACTER_ROJO = "X";
+    private static final String CARACTER_AZUL = "O";
 
     // Atributos
-    private Jugador jugadorRojo;
-    private Jugador jugadorAzul;
-    private Tablero tablero;
+    private final Jugador jugadorRojo;
+    private final Jugador jugadorAzul;
+    private final Tablero tablero;
     private Jugador turnoActual;
     private boolean finalizada;
     private String resultado;
     private Jugador ganador;
 
-    // Métodos
-
-    /** Inicia una nueva partida entre los jugadores */
+    /**
+     * Constructor que inicia una nueva partida entre dos jugadores.
+     * 
+     * @param jugadorRojo El jugador que usará las fichas rojas (X)
+     * @param jugadorAzul El jugador que usará las fichas azules (O)
+     */
     public Partida(Jugador jugadorRojo, Jugador jugadorAzul) {
-        this.jugadorRojo = jugadorRojo;
-        this.jugadorRojo.setCaracter("X");
-        this.jugadorRojo.setJugadaMagicaDisponible(true);
-        this.turnoActual = jugadorRojo; // Siempre empieza el jugador rojo
-        this.jugadorAzul = jugadorAzul;
-        this.jugadorAzul.setCaracter("O");
-        this.jugadorAzul.setJugadaMagicaDisponible(true);
+        this.jugadorRojo = inicializarJugador(jugadorRojo, CARACTER_ROJO);
+        this.jugadorAzul = inicializarJugador(jugadorAzul, CARACTER_AZUL);
         this.tablero = new Tablero();
+        this.turnoActual = jugadorRojo;
         this.finalizada = false;
         this.resultado = "";
         this.ganador = null;
     }
 
-    public void setGanador(Jugador ganador) {
-        this.ganador = ganador;
+    private Jugador inicializarJugador(Jugador jugador, String caracter) {
+        jugador.setCaracter(caracter);
+        jugador.setJugadaMagicaDisponible(true);
+        return jugador;
     }
 
-    /** Registra una jugada del jugador en la partida */
-    public boolean registrarJugada(Jugador jugador, String coordenada, String coordenadaMiniTablero) {
-        boolean retorno = false;
-        if (tablero.esJugadaValida(coordenada, coordenadaMiniTablero)) {
-            ejecutarJugada(jugador, coordenada, coordenadaMiniTablero);
-            verificarGanador();
-            if (!finalizada) {
-                cambiarTurno();
-            }
-            retorno = true;
+    /**
+     * Registra una jugada en la partida.
+     * 
+     * @param coordenada            La coordenada del mini-tablero
+     * @param coordenadaMiniTablero La coordenada dentro del mini-tablero
+     * @return true si la jugada fue válida y se registró correctamente, false en
+     *         caso contrario
+     */
+    public boolean registrarJugada(String coordenada, String coordenadaMiniTablero) {
+        if (finalizada || !tablero.esJugadaValida(coordenada, coordenadaMiniTablero)) {
+            return false;
+        }
+
+        ejecutarJugada(coordenada, coordenadaMiniTablero);
+        verificarEstadoPartida();
+        return true;
+    }
+
+    private void ejecutarJugada(String coordenada, String coordenadaMiniTablero) {
+        tablero.jugada(turnoActual.getCaracter(), coordenada, coordenadaMiniTablero);
+    }
+
+    private void verificarEstadoPartida() {
+        String estadoGanador = tablero.getGanadoresMiniTableros().determinarGanador();
+        if (!estadoGanador.equals("indeterminado")) {
+            finalizarPartida(turnoActual);
+        } else if (tablero.estaLleno()) {
+            finalizarPartida(null);
         } else {
-            // Verificar si el miniTablero está lleno
-            if (tablero.getMiniTablero(coordenada).estaLleno()) {
-                finalizarPartida();
-                cambiarTurno(); // Cambiamos el turno para que el ganador sea el jugador opuesto
-                resultado = turnoActual.getCaracter();
-                setGanador(turnoActual);
-                System.out.println("El miniTablero está lleno. La partida ha terminado.");
-                System.out.println("El ganador es: " + turnoActual.getAlias() + " (" + resultado + ")");
-                retorno = true;
-            } else {
-                System.out.println("Jugada inválida. Intente de nuevo.");
-            }
-        }
-        return retorno;
-    }
-
-    /** Ejecuta una jugada en el tablero */
-    public void ejecutarJugada(Jugador jugador, String coordenada, String coordenadaMiniTablero) {
-        tablero.jugada(jugador.getCaracter(), coordenada, coordenadaMiniTablero);
-    }
-
-    /** Ejecuta la jugada de la CPU en el tablero */
-    public void ejecutarJugadaCPU() {
-        if (turnoActual instanceof JugadorCPU) {
-            JugadorCPU cpu = (JugadorCPU) turnoActual;
-            String[] jugada = cpu.generarJugada(tablero);
-            while (!tablero.esJugadaValida(jugada[0], jugada[1])) {
-                jugada = cpu.generarJugada(tablero);
-            }
-            registrarJugada(cpu, jugada[0], jugada[1]);
+            cambiarTurno();
         }
     }
 
-    /** Cambia el turno al siguiente jugador */
-    public void cambiarTurno() {
+    private void cambiarTurno() {
         if (turnoActual == jugadorRojo) {
             turnoActual = jugadorAzul;
         } else {
@@ -93,76 +85,83 @@ public class Partida {
         }
     }
 
-    /** Realiza la jugada mágica del jugador */
-    public void jugadaMagica(Jugador jugador, String coordenada) {
-        if (jugador.isJugadaMagicaDisponible()) {
+    /**
+     * Realiza una jugada mágica en la coordenada especificada.
+     * 
+     * @param coordenada La coordenada donde se realizará la jugada mágica
+     */
+    public void jugadaMagica(String coordenada) {
+        if (turnoActual.isJugadaMagicaDisponible()) {
             tablero.limpiarMiniTablero(coordenada);
-            jugador.setJugadaMagicaDisponible(false);
-        }
-        // Verificar si hay un ganador después de la jugada mágica
-        verificarGanador();
-
-        // Cambiar el turno solo si la partida no ha finalizado
-        if (!finalizada) {
-            cambiarTurno();
+            turnoActual.setJugadaMagicaDisponible(false);
+            verificarEstadoPartida();
         }
     }
 
-    /** Verifica si hay un ganador en la partida */
-    public void verificarGanador() {
-        String ganador = tablero.getGanadoresMiniTableros().determinarGanador();
-        System.out.println("chequeo de ganador");
-        System.out.println(ganador);
-        if (!ganador.equals("indeterminado")) {
-            finalizarPartida();
-            resultado = turnoActual.getCaracter();
-            setGanador(turnoActual);
-        } else if (tablero.estaLleno()) {
-            finalizarPartida();
+    private void finalizarPartida(Jugador posibleGanador) {
+        finalizada = true;
+        ganador = posibleGanador;
+        if (ganador != null) {
+            resultado = ganador.getCaracter();
+        } else {
             resultado = "Empate";
         }
     }
 
-    /** Finaliza la partida y establece el resultado */
-    public void finalizarPartida() {
-        finalizada = true;
-    }
-
+    /**
+     * Finaliza la partida por abandono del jugador actual.
+     */
     public void abandonarPartida() {
-
-        if (turnoActual.equals(jugadorRojo)) {
-            System.out.println("ganador jugador2: " + jugadorAzul.getAlias());
-            resultado = "O";
-            ganador = jugadorAzul;
+        if (turnoActual == jugadorRojo) {
+            finalizarPartida(jugadorAzul);
         } else {
-            resultado = "X";
-            System.out.println("ganador jugador1: " + jugadorRojo.getAlias());
-            ganador = jugadorRojo;
+            finalizarPartida(jugadorRojo);
         }
-        finalizarPartida();
-
     }
 
-    /** Verifica si la partida está finalizada */
+    /**
+     * Verifica si la partida ha finalizado.
+     * 
+     * @return true si la partida ha finalizado, false en caso contrario
+     */
     public boolean isPartidaFinalizada() {
         return finalizada;
     }
 
-    /** Retorna el jugador que tiene el turno actual */
+    /**
+     * Obtiene el jugador que tiene el turno actual.
+     * 
+     * @return El jugador que tiene el turno actual
+     */
     public Jugador getTurnoActual() {
         return turnoActual;
     }
 
+    /**
+     * Obtiene el tablero de la partida.
+     * 
+     * @return El tablero de la partida
+     */
     public Tablero getTablero() {
         return tablero;
     }
 
+    /**
+     * Obtiene el jugador ganador de la partida.
+     * 
+     * @return El jugador ganador, o null si no hay ganador o la partida no ha
+     *         finalizado
+     */
     public Jugador getGanador() {
         return ganador;
     }
 
+    /**
+     * Obtiene el resultado de la partida.
+     * 
+     * @return El resultado de la partida ("X", "O" o "Empate")
+     */
     public String getResultado() {
         return resultado;
     }
-
 }
