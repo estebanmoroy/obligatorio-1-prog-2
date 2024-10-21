@@ -120,6 +120,21 @@ public class Partida {
     }
 
     /**
+     * Finaliza la partida cuando el jugador actual debe jugar en un mini-tablero
+     * lleno.
+     * El jugador actual pierde y se declara ganador al oponente.
+     */
+    public void finalizarPartidaPorMiniTableroLleno() {
+        this.finalizada = true;
+        if (this.turnoActual == jugadorRojo) {
+            this.ganador = jugadorAzul;
+        } else {
+            this.ganador = jugadorRojo;
+        }
+        this.resultado = this.ganador.getCaracter();
+    }
+
+    /**
      * Verifica si la partida ha finalizado.
      * 
      * @return true si la partida ha finalizado, false en caso contrario

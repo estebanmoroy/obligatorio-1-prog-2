@@ -108,20 +108,28 @@ public class Sistema {
             Jugador jugadorActual = partida.getTurnoActual();
             System.out.println("Turno de " + jugadorActual.getAlias() + " (" + jugadorActual.getCaracter() + ")");
 
+            if (!esPrimerMovimiento && partida.getTablero().getMiniTablero(coordenadaTablero).estaLleno()) {
+                System.out.println("El mini-tablero " + coordenadaTablero + " está lleno. " + jugadorActual.getAlias()
+                        + " pierde la partida.");
+                partida.finalizarPartidaPorMiniTableroLleno();
+                break;
+            }
+
             boolean jugadaValida = false;
-            while (!jugadaValida) {
+            while (!jugadaValida && !partida.isPartidaFinalizada()) {
                 String[] jugada = solicitarJugada(esPrimerMovimiento ? null : coordenadaTablero);
 
                 if (jugada[0].equals("A")) {
                     partida.abandonarPartida();
-                    guardarPartida(partida);
-                    return;
+                    break;
                 }
 
                 if (jugada[0].equalsIgnoreCase("M") && !vsCPU) {
                     if (jugadorActual.isJugadaMagicaDisponible()) {
                         partida.jugadaMagica(jugada[1]);
                         jugadaValida = true;
+                        coordenadaTablero = jugada[1];
+                        esPrimerMovimiento = true;
                     } else {
                         System.out.println("Error: Ya has usado tu jugada mágica en esta partida.");
                     }
@@ -138,6 +146,10 @@ public class Sistema {
                             coordenadaTablero = jugada[0];
                         }
                     }
+                }
+
+                if (!jugadaValida) {
+                    System.out.println("Jugada inválida. Intente de nuevo.");
                 }
             }
 
