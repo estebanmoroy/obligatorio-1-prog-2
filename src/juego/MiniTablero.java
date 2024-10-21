@@ -6,7 +6,9 @@
 package juego;
 
 /**
- *
+ * Representa un mini-tablero en el juego Gran Tateti.
+ * También se utiliza para representar el tablero de ganadores.
+ * 
  * @author Esteban Moroy 338885, Facundo Martínez 342426
  */
 public class MiniTablero {
@@ -17,18 +19,22 @@ public class MiniTablero {
     private static final String ROJO = "\u001B[31m";
     private static final String AZUL = "\u001B[34m";
 
-    // Constructor
+    /**
+     * Constructor que inicializa un mini-tablero vacío.
+     */
     public MiniTablero() {
         this.miniTablero = new String[3][3];
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                this.miniTablero[i][j] = "";
-            }
-        }
-
+        limpiarMiniTablero();
     }
 
+    /**
+     * Realiza una jugada en el mini-tablero.
+     * 
+     * @param coordenada      La coordenada donde se realiza la jugada (ej. "A1",
+     *                        "B2")
+     * @param caracterJugador El carácter del jugador ("X" o "O")
+     * @return true si la jugada es válida, false si no
+     */
     public boolean jugada(String coordenada, String caracterJugador) {
         int fila = getFila(coordenada);
         int columna = getColumna(coordenada);
@@ -40,11 +46,20 @@ public class MiniTablero {
         }
     }
 
+    /**
+     * Obtiene el contenido de un casillero específico.
+     * 
+     * @param fila    La fila del casillero (0-2)
+     * @param columna La columna del casillero (0-2)
+     * @return El contenido del casillero
+     */
     public String getCasillero(int fila, int columna) {
         return this.miniTablero[fila][columna];
     }
 
-    // Sobrecarga del método limpiar para usar en ganadoresMiniTableros
+    /**
+     * Limpia todo el mini-tablero, dejándolo vacío.
+     */
     public void limpiarMiniTablero() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -53,13 +68,23 @@ public class MiniTablero {
         }
     }
 
-    // limpiar un casillero específico
+    /**
+     * Limpia un casillero específico del mini-tablero.
+     * 
+     * @param coordenada La coordenada del casillero a limpiar
+     */
     public void limpiarCasillero(String coordenada) {
         int fila = getFila(coordenada);
         int columna = getColumna(coordenada);
         this.miniTablero[fila][columna] = "";
     }
 
+    /**
+     * Verifica si un casillero específico está vacío.
+     * 
+     * @param coordenada La coordenada del casillero a verificar
+     * @return true si el casillero está vacío, false si no
+     */
     public boolean estaCasilleroVacio(String coordenada) {
         int fila = getFila(coordenada);
         int columna = getColumna(coordenada);
@@ -104,6 +129,12 @@ public class MiniTablero {
         return retorno;
     }
 
+    /**
+     * Determina si hay un ganador en el mini-tablero.
+     * 
+     * @return "X" si gana X, "O" si gana O, "E" si hay empate, "indeterminado" si
+     *         aún no hay ganador
+     */
     public String determinarGanador() {
         String resultado = "indeterminado";
         // Checkeo de filas
@@ -135,17 +166,16 @@ public class MiniTablero {
         }
         // Checkeo de empate
         if (estaLleno() && resultado == "indeterminado" || resultado == "E") {
-            /*
-             * Se agrega checkeo con caracter "E" dado a que en el tablero donde registramos
-             * los ganadores,
-             * el caracter "E" se usa para indicar los empates
-             */
-
             resultado = "E";
         }
         return resultado;
     }
 
+    /**
+     * Verifica si el mini-tablero está completamente lleno.
+     * 
+     * @return true si está lleno, false si no
+     */
     public boolean estaLleno() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -157,10 +187,14 @@ public class MiniTablero {
         return true;
     }
 
-    public void setMiniTablero(String[][] miniTablero) {
-        this.miniTablero = miniTablero;
-    }
-
+    /**
+     * Genera un String de una fila del mini-tablero.
+     * 
+     * @param numeroDeFila El número de la fila a representar
+     * @param ganador      El ganador del mini-tablero (para colorear toda la fila
+     *                     si corresponde)
+     * @return Una String que representa la fila especificada
+     */
     public String filaToString(int numeroDeFila, String ganador) {
         String retorno = "";
         String color = null;
@@ -199,21 +233,13 @@ public class MiniTablero {
             }
         }
         return retorno;
-
     }
 
-    public String toStringColor(String color) {
-        String retorno = "";
-        for (int i = 0; i < this.miniTablero.length; i++) {
-            if (!(i < 2)) { // Revisa si no es la ultima columna
-                retorno += this.filaToString(i, color);
-            } else {
-                retorno += this.filaToString(i, color) + "\n"; // En caso de que si le agrega un salto de liena
-            }
-        }
-        return retorno;
-    }
-
+    /**
+     * Genera una representación en String del mini-tablero completo.
+     * 
+     * @return Una String que representa el mini-tablero completo
+     */
     @Override
     public String toString() {
         String retorno = "";
@@ -226,5 +252,4 @@ public class MiniTablero {
         }
         return retorno;
     }
-
 }
