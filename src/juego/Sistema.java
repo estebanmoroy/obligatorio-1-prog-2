@@ -116,7 +116,6 @@ public class Sistema {
             }
 
             boolean jugadaValida = false;
-            int intentosCPU = 0; // Contador para evitar loops infinitos
 
             while (!jugadaValida && !partida.isPartidaFinalizada()) {
                 String[] jugada;
