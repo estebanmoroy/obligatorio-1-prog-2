@@ -4,24 +4,15 @@
  */
 package juego;
 
-/**
- *
- * @author Esteban Moroy 338885, Facundo Martinez 342426
- */
-import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.Scanner;
 import java.util.InputMismatchException;
 
 public class Sistema {
-    // Atributos
-    private static ArrayList<Partida> historialPartidas = new ArrayList<>();
-    private static ArrayList<Jugador> jugadores = new ArrayList<>();
+    private static final ArrayList<Partida> historialPartidas = new ArrayList<>();
+    private static final ArrayList<Jugador> jugadores = new ArrayList<>();
+    private static final Scanner scanner = new Scanner(System.in);
 
-    // Métodos
-
-    /** Getters */
     public static ArrayList<Jugador> getJugadores() {
         return jugadores;
     }
@@ -30,170 +21,85 @@ public class Sistema {
         return historialPartidas;
     }
 
-    // menu
-    /** Inicia menu */
     public static void iniciarMenu() {
-        Scanner teclado = new Scanner(System.in);
-        int opcion = 0;
-        // Creo cpu posicion 0
         JugadorCPU cpu = new JugadorCPU("cpu", 0, "CPU", null, false);
-        Sistema.agregarJugador(cpu);
+        agregarJugador(cpu);
 
-        while (opcion != 5) {
+        int opcion;
+        do {
             Interfaz.mostrarMenu();
-            System.out.print("Elige una opción: ");
+            opcion = leerOpcion();
+            procesarOpcion(opcion);
+        } while (opcion != 5);
+    }
+
+    private static int leerOpcion() {
+        while (true) {
             try {
-                opcion = teclado.nextInt();
-                procesarOpcion(opcion);
+                System.out.print("Elige una opción: ");
+                return scanner.nextInt();
             } catch (InputMismatchException e) {
-                // Maneja el caso donde el usuario ingresa un valor que no es un número
-                System.out.println("Favor digite opcion valida");
-                teclado.nextLine(); // Limpia la entrada incorrecta
+                System.out.println("Por favor, ingrese un número válido.");
+                scanner.nextLine(); // Limpiar el buffer
             }
-        }
-
-    }
-
-    /** Procesa la opción seleccionada por el usuario */
-
-    public static void procesarOpcion(int opcion) {
-        if (opcion == 1) {
-            System.out.println(" opcion 1:");
-            Interfaz.TextoRegistrarJugador();
-
-        }
-        ;
-        if (opcion == 2) {
-            System.out.println(" opcion 2:");
-            if (jugadores.isEmpty() || jugadores.size() < 3) {
-                System.out.println("Error: debe tener al menos 2 jugadores registrados.");
-            } else {
-                Sistema.jugar();
-            }
-
-        }
-        ;
-        if (opcion == 3) {
-            System.out.println(" opcion 3:");
-            if (jugadores.isEmpty() || jugadores.size() < 2) {
-                System.out.println("Error: debe tener al menos 1 jugador registrado.");
-            } else {
-                Sistema.jugarVsCPU();
-            }
-
-        }
-        ;
-        if (opcion == 4) {
-            System.out.println(" opcion 4:");
-            if (jugadores.isEmpty()) {
-                System.out.println("No hay jugadores registrados");
-            } else {
-                Interfaz.mostrarRanking();
-            }
-
-        }
-        ;
-        if (opcion == 5) {
-            System.out.println(" opcion 5:");
-            // salir();
-
         }
     }
 
-    // Método para seleccionar un jugador sin exclusión
-    private static Jugador seleccionarJugadorGenerico(Jugador excluido) {
-        /**
-         * Procesa la opción seleccionada por el usuario
-         * if (jugadores.isEmpty() || jugadores.size() < 1) {
-         * System.out.println("No hays jugadores disponibles.");
-         * return null;
-         * }
-         */
-        System.out.println("Lista de jugadores:");
-        for (int i = 1; i < jugadores.size(); i++) {
-            Jugador jugador = jugadores.get(i);
-            // Si hay un jugador a excluir, no lo mostramos en la lista
-            if (excluido == null || !jugador.equals(excluido)) {
-                System.out.println((i + 1) + ". " + jugador.getAlias());
-            }
-        }
-
-        Scanner teclado = new Scanner(System.in);
-        Jugador jugadorSeleccionado = null;
-        boolean seleccionValida = false;
-
-        // Repetir hasta que la selección sea válida
-        while (!seleccionValida) {
-            try {
-                System.out.println("Selecciona un jugador ingresando el número correspondiente:");
-                int seleccion = teclado.nextInt() - 1; // Ajustar el índice
-
-                jugadorSeleccionado = jugadores.get(seleccion);
-
-                // Verificar que no se seleccionó al jugador excluido
-                if (excluido == null || !jugadorSeleccionado.equals(excluido)) {
-                    seleccionValida = true; // La selección es válida, salir del bucle
+    private static void procesarOpcion(int opcion) {
+        switch (opcion) {
+            case 1:
+                Interfaz.TextoRegistrarJugador();
+                break;
+            case 2:
+                if (jugadores.size() < 3) {
+                    System.out.println("Error: debe tener al menos 2 jugadores registrados.");
                 } else {
-                    System.out.println("Error: El jugador seleccionado está excluido.");
+                    jugar();
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Error: Debes ingresar un número válido.");
-                teclado.next(); // Limpiar el buffer de entrada
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Error: Seleccion fuera de rango.");
-            }
+                break;
+            case 3:
+                if (jugadores.size() < 2) {
+                    System.out.println("Error: debe tener al menos 1 jugador registrado.");
+                } else {
+                    jugarVsCPU();
+                }
+                break;
+            case 4:
+                if (jugadores.isEmpty()) {
+                    System.out.println("No hay jugadores registrados");
+                } else {
+                    Interfaz.mostrarRanking();
+                }
+                break;
+            case 5:
+                System.out.println("Saliendo del juego...");
+                break;
+            default:
+                System.out.println("Opción no válida. Intente nuevamente.");
         }
-
-        return jugadorSeleccionado;
     }
 
-    // Método para seleccionar un jugador sin exclusión
-    public static Jugador seleccionarJugador() {
-        return seleccionarJugadorGenerico(null); // Llamar al método sin excluir a ningún jugador
-    }
-
-    // Método para seleccionar un jugador excluyendo uno específico
-    public static Jugador seleccionarJugadorExcluyendo(Jugador excluido) {
-        return seleccionarJugadorGenerico(excluido); // Llamar al método excluyendo al jugador especificado
-    }
-
-    // juegos
-    /** agregar jugador */
     public static void agregarJugador(Jugador nuevoJugador) {
         if (aliasUnico(nuevoJugador)) {
-            jugadores.add(nuevoJugador); // Alias es único, se puede agregar el jugador
-            System.out.println("Jugador:" + nuevoJugador.getAlias() + "registrado exitosamente.");
+            jugadores.add(nuevoJugador);
+            System.out.println("Jugador " + nuevoJugador.getAlias() + " registrado exitosamente.");
         } else {
-            System.out.println("Error: Ya existe un jugador con el alias '" + nuevoJugador.getAlias());
+            System.out.println("Error: Ya existe un jugador con el alias '" + nuevoJugador.getAlias() + "'");
         }
-
     }
 
-    public static void jugar() {
+    private static void jugar() {
         Jugador jugador1 = seleccionarJugador();
         Jugador jugador2 = seleccionarJugadorExcluyendo(jugador1);
-
-        Partida partida = new Partida(jugador1, jugador2);
-        System.out.println("Jugador 1 es: " + jugador1.getAlias() + " (X)");
-        System.out.println("Jugador 2 es: " + jugador2.getAlias() + " (O)");
-
-        ejecutarPartida(partida, false);
+        ejecutarPartida(new Partida(jugador1, jugador2), false);
     }
 
-    public static void jugarVsCPU() {
+    private static void jugarVsCPU() {
         JugadorCPU cpu = (JugadorCPU) jugadores.get(0);
         Jugador jugador1 = seleccionarJugador();
-
-        Partida partida = new Partida(jugador1, cpu);
-        System.out.println("Jugador 1 es: " + jugador1.getAlias() + " (X)");
-        System.out.println("Jugador 2 es: CPU (O)");
-
-        jugador1.setJugadaMagicaDisponible(false);
-
-        ejecutarPartida(partida, true);
+        ejecutarPartida(new Partida(jugador1, cpu), true);
     }
 
-    /** Inicia una nueva partida entre dos jugadores */
     private static void ejecutarPartida(Partida partida, boolean vsCPU) {
         String coordenadaTablero = null;
         boolean esPrimerMovimiento = true;
@@ -204,15 +110,9 @@ public class Sistema {
 
             boolean jugadaValida = false;
             while (!jugadaValida) {
-                String[] jugada;
-                if (vsCPU && jugadorActual instanceof JugadorCPU) {
-                    jugada = new String[] { ((JugadorCPU) jugadorActual).generarJugada() };
-                } else {
-                    jugada = solicitarJugada(esPrimerMovimiento ? null : coordenadaTablero);
-                }
+                String[] jugada = solicitarJugada(esPrimerMovimiento ? null : coordenadaTablero);
 
                 if (jugada[0].equals("A")) {
-                    System.out.println(jugadorActual.getAlias() + " ha decidido abandonar la partida.");
                     partida.abandonarPartida();
                     guardarPartida(partida);
                     return;
@@ -220,22 +120,20 @@ public class Sistema {
 
                 if (jugada[0].equalsIgnoreCase("M") && !vsCPU) {
                     if (jugadorActual.isJugadaMagicaDisponible()) {
-                        partida.jugadaMagica(jugadorActual, jugada[1]);
-                        System.out.println(jugadorActual.getAlias() + " ha usado su jugada mágica en " + jugada[1]);
+                        partida.jugadaMagica(jugada[1]);
                         jugadaValida = true;
                     } else {
-                        System.out.println("Error: " + jugadorActual.getAlias()
-                                + " ya ha usado su jugada mágica en esta partida.");
+                        System.out.println("Error: Ya has usado tu jugada mágica en esta partida.");
                     }
                 } else {
                     if (esPrimerMovimiento) {
-                        jugadaValida = partida.registrarJugada(jugadorActual, jugada[0], jugada[1]);
+                        jugadaValida = partida.registrarJugada(jugada[0], jugada[1]);
                         if (jugadaValida) {
                             coordenadaTablero = jugada[1];
                             esPrimerMovimiento = false;
                         }
                     } else {
-                        jugadaValida = partida.registrarJugada(jugadorActual, coordenadaTablero, jugada[0]);
+                        jugadaValida = partida.registrarJugada(coordenadaTablero, jugada[0]);
                         if (jugadaValida) {
                             coordenadaTablero = jugada[0];
                         }
@@ -247,29 +145,13 @@ public class Sistema {
                 System.out.println("Estado actual del tablero:");
                 System.out.println(partida.getTablero().toString(coordenadaTablero));
             }
-
-            partida.verificarGanador();
         }
 
-        // Mostrar resultado final
-        String resultado = partida.getResultado();
-        if (resultado.equals("Empate")) {
-            System.out.println("La partida ha terminado en empate.");
-        } else {
-            Jugador ganador = partida.getGanador();
-            System.out.println("El ganador es: " + ganador.getAlias() + " (" + resultado + ")");
-        }
-
-        // Guardar la partida en el historial
+        mostrarResultadoFinal(partida);
         guardarPartida(partida);
     }
 
-    /**
-     * Muestra mensaje de opciones, lee un input del teclado y retorna el output
-     * correspondiente
-     */
     private static String[] solicitarJugada(String coordenadaTablero) {
-        Scanner scanner = new Scanner(System.in);
         while (true) {
             try {
                 if (coordenadaTablero == null) {
@@ -281,46 +163,53 @@ public class Sistema {
                 }
 
                 String input = scanner.nextLine().trim().toUpperCase();
-
-                if (input.isEmpty()) {
-                    throw new IllegalArgumentException("La entrada no puede estar vacía.");
-                }
-
-                if (input.equals("A")) {
-                    return new String[] { "A" };
-                }
-
-                if (input.startsWith("M")) {
-                    String[] partes = input.split(",");
-                    if (partes.length != 2) {
-                        throw new IllegalArgumentException("Para la jugada mágica, use el formato 'M,coordenada'.");
-                    }
-                    validarFormatoCoordenada(partes[1]);
-                    return new String[] { "M", partes[1] };
-                }
-
-                if (coordenadaTablero == null) {
-                    String[] coordenadas = input.split(",");
-                    if (coordenadas.length != 2) {
-                        throw new IllegalArgumentException("Formato incorrecto. Use 'coordenada,miniCoordenada'.");
-                    }
-                    validarFormatoCoordenada(coordenadas[0]);
-                    validarFormatoCoordenada(coordenadas[1]);
-                    return coordenadas;
-                } else {
-                    // Para jugadas subsiguientes, aceptamos una sola coordenada
-                    if (input.contains(",")) {
-                        throw new IllegalArgumentException(
-                                "Para jugadas subsiguientes, ingrese solo la miniCoordenada.");
-                    }
-                    validarFormatoCoordenada(input);
-                    return new String[] { input };
-                }
+                return procesarInput(input, coordenadaTablero);
             } catch (IllegalArgumentException e) {
                 System.out.println("Error: " + e.getMessage() + " Por favor, intente de nuevo.");
-            } catch (Exception e) {
-                System.out.println("Error inesperado: " + e.getMessage() + " Por favor, intente de nuevo.");
             }
+        }
+    }
+
+    private static String[] procesarInput(String input, String coordenadaTablero) {
+        if (input.isEmpty()) {
+            throw new IllegalArgumentException("La entrada no puede estar vacía.");
+        }
+
+        if (input.equals("A")) {
+            return new String[] { "A" };
+        }
+
+        if (input.startsWith("M")) {
+            return procesarJugadaMagica(input);
+        }
+
+        return procesarJugadaNormal(input, coordenadaTablero);
+    }
+
+    private static String[] procesarJugadaMagica(String input) {
+        String[] partes = input.split(",");
+        if (partes.length != 2) {
+            throw new IllegalArgumentException("Para la jugada mágica, use el formato 'M,coordenada'.");
+        }
+        validarFormatoCoordenada(partes[1]);
+        return new String[] { "M", partes[1] };
+    }
+
+    private static String[] procesarJugadaNormal(String input, String coordenadaTablero) {
+        if (coordenadaTablero == null) {
+            String[] coordenadas = input.split(",");
+            if (coordenadas.length != 2) {
+                throw new IllegalArgumentException("Formato incorrecto. Use 'coordenada,miniCoordenada'.");
+            }
+            validarFormatoCoordenada(coordenadas[0]);
+            validarFormatoCoordenada(coordenadas[1]);
+            return coordenadas;
+        } else {
+            if (input.contains(",")) {
+                throw new IllegalArgumentException("Para jugadas subsiguientes, ingrese solo la miniCoordenada.");
+            }
+            validarFormatoCoordenada(input);
+            return new String[] { input };
         }
     }
 
@@ -331,70 +220,98 @@ public class Sistema {
         }
     }
 
-    /** Guarda una partida finalizada en el historial */
     public static void guardarPartida(Partida partida) {
         historialPartidas.add(partida);
     }
 
-    /** Carga una partida del historial según el ID */
-    public static Partida cargarPartida(int id) {
-        // Retorna una partida del historial
-        return null;
-    }
-
-    /** verificar duplicado de alias */
     private static boolean aliasUnico(Jugador nuevoJugador) {
-        boolean esUnico = true;
         for (Jugador jugador : jugadores) {
             if (jugador.equals(nuevoJugador)) {
-                esUnico = false;
+                return false;
             }
         }
-
-        return esUnico;
+        return true;
     }
 
     public static String[][] calcularRanking() {
-        // Obtener la lista de jugadores
-        ArrayList<Jugador> jugadores = Sistema.getJugadores();
-
-        // Crear la matriz: Cada fila tiene 2 columnas [alias, victorias]
         String[][] ranking = new String[jugadores.size()][2];
-
-        // Inicializar la matriz con los alias de los jugadores y 0 victorias
         for (int i = 0; i < jugadores.size(); i++) {
             ranking[i][0] = jugadores.get(i).getAlias();
-            ranking[i][1] = "0"; // Inicializamos con 0 victorias
+            ranking[i][1] = "0";
         }
 
-        // Obtener el historial de partidas
-        ArrayList<Partida> historial = Sistema.getHistorialPartidas();
-
-        // Contar cuantas veces cada jugador gano
-        for (Partida partida : historial) {
+        for (Partida partida : historialPartidas) {
             Jugador ganador = partida.getGanador();
             if (ganador != null) {
-                // Encontrar el alias del ganador en la matriz y aumentar el contador
                 for (int i = 0; i < ranking.length; i++) {
                     if (ranking[i][0].equals(ganador.getAlias())) {
-                        // Convertir la cantidad de victorias a entero, incrementar y volver a String
                         int victorias = Integer.parseInt(ranking[i][1]);
                         ranking[i][1] = Integer.toString(victorias + 1);
+                        break;
                     }
                 }
             }
         }
 
-        // Ordenar la matriz por la columna de victorias (de mayor a menor)
-        Arrays.sort(ranking, new Comparator<String[]>() {
-            @Override
-            public int compare(String[] a, String[] b) {
-                return Integer.compare(Integer.parseInt(b[1]), Integer.parseInt(a[1])); // Ordenar por victorias
-                                                                                        // (columna 1)
+        // Ordenar el ranking por victorias (de mayor a menor)
+        for (int i = 0; i < ranking.length - 1; i++) {
+            for (int j = 0; j < ranking.length - i - 1; j++) {
+                if (Integer.parseInt(ranking[j][1]) < Integer.parseInt(ranking[j + 1][1])) {
+                    String[] temp = ranking[j];
+                    ranking[j] = ranking[j + 1];
+                    ranking[j + 1] = temp;
+                }
             }
-        });
+        }
 
         return ranking;
     }
 
+    private static Jugador seleccionarJugador() {
+        return seleccionarJugadorGenerico(null);
+    }
+
+    private static Jugador seleccionarJugadorExcluyendo(Jugador excluido) {
+        return seleccionarJugadorGenerico(excluido);
+    }
+
+    private static Jugador seleccionarJugadorGenerico(Jugador excluido) {
+        System.out.println("Lista de jugadores:");
+        for (int i = 1; i < jugadores.size(); i++) {
+            Jugador jugador = jugadores.get(i);
+            if (excluido == null || !jugador.equals(excluido)) {
+                System.out.println((i) + ". " + jugador.getAlias());
+            }
+        }
+
+        while (true) {
+            try {
+                System.out.println("Selecciona un jugador ingresando el número correspondiente:");
+                int seleccion = scanner.nextInt() - 1;
+                scanner.nextLine(); // Limpiar el buffer
+
+                Jugador jugadorSeleccionado = jugadores.get(seleccion);
+                if (excluido == null || !jugadorSeleccionado.equals(excluido)) {
+                    return jugadorSeleccionado;
+                } else {
+                    System.out.println("Error: El jugador seleccionado está excluido.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Debes ingresar un número válido.");
+                scanner.nextLine(); // Limpiar el buffer
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Error: Selección fuera de rango.");
+            }
+        }
+    }
+
+    private static void mostrarResultadoFinal(Partida partida) {
+        String resultado = partida.getResultado();
+        if (resultado.equals("Empate")) {
+            System.out.println("La partida ha terminado en empate.");
+        } else {
+            Jugador ganador = partida.getGanador();
+            System.out.println("El ganador es: " + ganador.getAlias() + " (" + resultado + ")");
+        }
+    }
 }
