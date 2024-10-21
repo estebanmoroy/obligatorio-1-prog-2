@@ -98,14 +98,4 @@ public class Interfaz {
             System.out.println();
         }
     }
-
-    /**
-     * Renderiza el tablero actual en el sistema.
-     * 
-     * @param tablero El tablero a renderizar
-     */
-    public static void renderTablero(Tablero tablero) {
-        // Implementación pendiente
-        System.out.println(tablero.toString());
-    }
 }
