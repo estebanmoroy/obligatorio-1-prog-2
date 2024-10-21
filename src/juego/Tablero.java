@@ -133,6 +133,10 @@ public class Tablero {
         this.tableroPrincipal[fila][columna] = miniTablero;
     }
 
+    public MiniTablero getMiniTablero(String coordenada) {
+        return this.tableroPrincipal[getFila(coordenada)][getColumna(coordenada)];
+    }
+
     public MiniTablero getGanadoresMiniTableros() {
         return this.ganadoresMiniTableros;
     }

@@ -27,24 +27,23 @@ public class Main {
         System.out.println("Inicializando Gran Tateti...");
 
         // Crear y agregar jugadores precargados
-        //JugadorCPU cpu = new JugadorCPU("CPU", 0, "cpu", null, true);
-        //ugador esteban = new Jugador("Esteban", 27, "esteban", null, true);
-        //Jugador facundo = new Jugador("Facundo", 24, "facundo", null, true);
-        //JugadorCPU cpu = new JugadorCPU("CPU", 0, "cpu", null, true);
-        //Sistema.agregarJugador(cpu);
+        // JugadorCPU cpu = new JugadorCPU("CPU", 0, "cpu", null, true);
+        Jugador esteban = new Jugador("Esteban", 27, "esteban", null, true);
+        Jugador facundo = new Jugador("Facundo", 24, "facundo", null, true);
+        // JugadorCPU cpu = new JugadorCPU("CPU", 0, "cpu", null, true);
+        // Sistema.agregarJugador(cpu);
 
-        //Sistema.agregarJugador(cpu);
-        //Sistema.agregarJugador(esteban);
-        //Sistema.agregarJugador(facundo);
+        // Sistema.agregarJugador(cpu);
+        // Sistema.agregarJugador(esteban);
+        // Sistema.agregarJugador(facundo);
 
-        //partidas prueba
-        //Partida partida1 = new Partida(esteban,facundo);
-        //Partida partida2 = new Partida(facundo,esteban);
+        // partidas prueba
+        // Partida partida1 = new Partida(esteban,facundo);
+        // Partida partida2 = new Partida(facundo,esteban);
 
-        //partida1.setGanador(esteban);
-        //Sistema.guardarPartida(partida1);
-        //Sistema.guardarPartida(partida2);
-
+        // partida1.setGanador(esteban);
+        // Sistema.guardarPartida(partida1);
+        // Sistema.guardarPartida(partida2);
 
         try {
             Interfaz.mostrarBienvenida();

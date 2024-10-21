@@ -51,7 +51,18 @@ public class Partida {
             }
             retorno = true;
         } else {
-            retorno = false;
+            // Verificar si el miniTablero está lleno
+            if (tablero.getMiniTablero(coordenada).estaLleno()) {
+                finalizarPartida();
+                cambiarTurno(); // Cambiamos el turno para que el ganador sea el jugador opuesto
+                resultado = turnoActual.getCaracter();
+                setGanador(turnoActual);
+                System.out.println("El miniTablero está lleno. La partida ha terminado.");
+                System.out.println("El ganador es: " + turnoActual.getAlias() + " (" + resultado + ")");
+                retorno = true;
+            } else {
+                System.out.println("Jugada inválida. Intente de nuevo.");
+            }
         }
         return retorno;
     }
