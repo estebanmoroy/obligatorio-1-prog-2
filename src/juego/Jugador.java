@@ -5,19 +5,28 @@
 package juego;
 
 /**
- *
+ * Representa a un jugador en el juego Gran Tateti.
+ * 
  * @author Esteban Moroy 338885, Facundo Martinez 342426
  */
 public class Jugador {
-
-    // Atributos
-    private String nombre;
+    private final String nombre;
     private int edad;
-    private String alias;
+    private final String alias;
     private String caracter;
     private boolean jugadaMagicaDisponible;
 
-    // Constructor
+    /**
+     * Constructor para crear un nuevo jugador.
+     * 
+     * @param nombre                 Nombre del jugador
+     * @param edad                   Edad del jugador
+     * @param alias                  Alias único del jugador
+     * @param caracter               Carácter que representa al jugador en el
+     *                               tablero (X u O)
+     * @param jugadaMagicaDisponible Indica si el jugador puede usar la jugada
+     *                               mágica
+     */
     public Jugador(String nombre, int edad, String alias, String caracter, boolean jugadaMagicaDisponible) {
         this.nombre = nombre;
         this.edad = edad;
@@ -26,36 +35,26 @@ public class Jugador {
         this.jugadaMagicaDisponible = jugadaMagicaDisponible;
     }
 
-    // Métodos
+    /*
+     * Getters y Setters
+     * No se generan setters para los atributos Nombre y Alias ya que estos no
+     * deberían cambiar luego de creado el jugador
+     */
 
-    /** Retorna el nombre del jugador */
     public String getNombre() {
         return nombre;
     }
 
-    /** Modifica el nombre del jugador */
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    /** Retorna la edad del jugador */
     public int getEdad() {
         return edad;
     }
 
-    /** Modifica la edad del jugador */
     public void setEdad(int edad) {
         this.edad = edad;
     }
 
-    /** Retorna el alias del jugador */
     public String getAlias() {
         return alias;
-    }
-
-    /** Modifica el alias del jugador */
-    public void setAlias(String alias) {
-        this.alias = alias;
     }
 
     public String getCaracter() {
@@ -74,22 +73,31 @@ public class Jugador {
         this.jugadaMagicaDisponible = jugadaMagicaDisponible;
     }
 
-    /** Compara si el jugador actual es igual a otro jugador */
+    /**
+     * Compara si el jugador actual es igual a otro jugador basándose en el alias.
+     * 
+     * @param obj Objeto a comparar
+     * @return true si los alias son iguales, false en caso contrario
+     */
     @Override
     public boolean equals(Object obj) {
+        boolean retorno = false;
         if (obj instanceof Jugador) {
             Jugador jugador = (Jugador) obj;
             // Retorna true si ambos jugadores tienen el mismo alias
-            return this.alias.equals(jugador.getAlias());
-        } else {
-            return false;
+            retorno = this.alias.equals(jugador.getAlias());
         }
-    }
-    //override al toString
-    @Override
-    public String toString(){
-        return "nombre: " + this.getNombre() + ", edad: " + this.getEdad() + 
-                ", alias: " + this.getAlias() ;
+        return retorno;
     }
 
+    /**
+     * Override del método toString
+     * 
+     * @return String con nombre, edad y alias del jugador
+     */
+    @Override
+    public String toString() {
+        return "Nombre: " + this.getNombre() + ", Edad: " + this.getEdad() +
+                ", Alias: " + this.getAlias();
+    }
 }
